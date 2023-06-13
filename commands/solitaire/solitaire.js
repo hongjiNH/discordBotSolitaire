@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const botName = process.env.botName
 
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -18,18 +18,24 @@ module.exports = {
         {
             const title = interaction.options.getString('title');
             const question = interaction.options.getString('question');
-            console.log(title);
-            console.log(question);
-            
-            const list = [];
-            if (list.length == 0) {
-                await interaction.reply("No one is on the list now, click on add me button to add your name")
+         
+            const confirm = new ButtonBuilder()
+                .setCustomId('confirm')
+                .setLabel('Confirm Ban')
+                .setStyle(ButtonStyle.Danger);
 
+            const cancel = new ButtonBuilder()
+                .setCustomId('cancel')
+                .setLabel('Cancel')
+                .setStyle(ButtonStyle.Secondary);
 
-            }
-            else {
+            const row = new ActionRowBuilder()
+                .addComponents(cancel, confirm);
 
-            }
+            await interaction.reply({
+                content: `**${title}** \n ${question}?`,
+                components: [row],
+            });
         }
     },
 };
