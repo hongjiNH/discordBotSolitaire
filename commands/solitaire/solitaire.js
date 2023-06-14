@@ -19,7 +19,12 @@ module.exports = {
                     .setRequired(true))
                 .addStringOption(option => option.setName('question')
                     .setDescription('The question of this')
-                    .setRequired(true)))
+                    .setRequired(true))
+                .addIntegerOption(option => option.setName('days')
+                    .setDescription('How many day/s')
+                    .setRequired(true)
+                    .setMinValue(1)
+                    .setMaxValue(30)))
 
         .addSubcommand(subcommand =>
             subcommand
@@ -30,11 +35,20 @@ module.exports = {
                     .setRequired(true))
                 .addStringOption(option => option.setName('question')
                     .setDescription('The question of this')
-                    .setRequired(true))),
+                    .setRequired(true))
+                .addIntegerOption(option => option.setName('hours')
+                    .setDescription('How many hour/s')
+                    .setRequired(true)
+                    .setMinValue(1)
+                    .setMaxValue(24))),
     async execute(interaction) {
         {
             const title = interaction.options.getString('title');
             const question = interaction.options.getString('question');
+
+            const hour = interaction.options.getInteger('hours');
+            const day = interaction.options.getInteger('days');
+
             const list = [];
             const add = new ButtonBuilder()
                 .setCustomId('add')
@@ -51,11 +65,17 @@ module.exports = {
 
             const exampleEmbed = new EmbedBuilder()
                 .setColor(0x0099FF)
-                .setTitle(title)
+                
                 .setDescription(question + "?")
                 .setTimestamp()
                 .setFooter({ text: `By @nothealthy - youtube channel`, iconURL: 'attachment://' + logo });
 
+            if(hour===null){
+                exampleEmbed.setTitle(title+" Form will end on "+day+" day/s")
+            }
+            else{
+                exampleEmbed.setTitle(title+" Form will end on "+hour+" hour/s")
+            }
             // console.log(list.length);
             // console.log(list.length == 0);
             // console.log(list.length === 0);
@@ -87,11 +107,18 @@ module.exports = {
                     console.log(list);
                     const listEmbed = new EmbedBuilder()
                         .setColor(0x0099FF)
-                        .setTitle(title)
                         .setDescription(question + "?")
                         .setTimestamp()
                         .addFields({ name: list[0], value: "\u200B", inline: true })
                         .setFooter({ text: `By @nothealthy - youtube channel`, iconURL: 'attachment://' + logo });
+
+                        if(hour===null){
+                            listEmbed.setTitle(title+" Form will end on "+day+" day/s")
+                        }
+                        else{
+                            listEmbed.setTitle(title+" Form will end on "+hour+" hour/s")
+                        }
+
 
                     await confirmation.update({ embeds: [listEmbed], files: [file], components: [row] });
                 }
