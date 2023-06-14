@@ -1,6 +1,5 @@
 require('dotenv').config();
 
-const version = process.env.version
 const botName = process.env.botName
 const logo = process.env.logo
 
