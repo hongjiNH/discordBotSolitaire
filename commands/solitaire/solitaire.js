@@ -9,7 +9,7 @@ module.exports = {
         .setName('create_solitaire')
         .setDescription("Ask a question and allowing user to click to add their username in " + botName)
         .addStringOption(option => option.setName('title')
-            .setDescription('The question of this')
+            .setDescription('Title of this question')
             .setRequired(true))
         .addStringOption(option => option.setName('question')
             .setDescription('The question of this')

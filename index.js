@@ -1,10 +1,12 @@
 require('dotenv').config();
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
+const { Client, Collection, Events, GatewayIntentBits, EmbedBuilder, AttachmentBuilder } = require('discord.js');
 
+const botName = process.env.botName
 const token = process.env.token;
-
+const pic = 'pic1.png'
+const file = new AttachmentBuilder('../' + botName + '/assets/' + pic);
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.commands = new Collection();
@@ -13,14 +15,14 @@ const commandFolders = fs.readdirSync(foldersPath);
 
 for (const folder of commandFolders) {
 	const commandsPath = path.join(foldersPath, folder);
-	
+
 	const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 	for (const file of commandFiles) {
 		const filePath = path.join(commandsPath, file);
 		const command = require(filePath);
 		if ('data' in command && 'execute' in command) {
-			client.commands.set(command.data.name,command);
-			
+			client.commands.set(command.data.name, command);
+
 		} else {
 			console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
 		}
@@ -41,10 +43,18 @@ client.on(Events.InteractionCreate, async interaction => {
 		await command.execute(interaction);
 	} catch (error) {
 		console.error(error);
+		const exampleEmbed = new EmbedBuilder()
+			.setColor(0xED4245)
+			//:failed:
+			//	.setDescription({ content: 'There was an error while executing this command!', ephemeral: true })
+			.setDescription(`  There was an error while executing this command!  `)
+			.setTimestamp()
+			.setFooter({ text: `By @nothealthy - youtube channel`, iconURL: 'attachment://' + pic });
 		if (interaction.replied || interaction.deferred) {
-			await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
+
+			await interaction.followUp({ embeds: [exampleEmbed], files: [file] });
 		} else {
-			await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+			await interaction.reply({ embeds: [exampleEmbed], files: [file] });
 		}
 	}
 });
