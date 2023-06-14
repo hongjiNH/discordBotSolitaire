@@ -14,7 +14,8 @@ module.exports = {
 	async execute(interaction) {
 		const exampleEmbed = new EmbedBuilder()
 			.setColor(0x0099FF)
-			.setDescription("Contact the support by joining the following server: " + support)
+			.setDescription("Contact the support by joining " )
+			.addFields({ name: 'Support Server', value: support, inline: true })
 			.setTimestamp()
 			.setFooter({ text: `By @nothealthy - youtube channel`, iconURL: 'attachment://'+logo });
 		return interaction.reply({ embeds: [exampleEmbed], files: [file] });

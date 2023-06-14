@@ -5,8 +5,9 @@ const { Client, Collection, Events, GatewayIntentBits, EmbedBuilder, AttachmentB
 
 const botName = process.env.botName
 const token = process.env.token;
-const pic = 'pic1.png'
-const file = new AttachmentBuilder('../' + botName + '/assets/' + pic);
+const support = process.env.support
+const logo=process.env.logo
+const file = new AttachmentBuilder('../' + botName + '/assets/' + logo);
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.commands = new Collection();
@@ -46,15 +47,14 @@ client.on(Events.InteractionCreate, async interaction => {
 		const exampleEmbed = new EmbedBuilder()
 			.setColor(0xED4245)
 			//:failed:
-			//	.setDescription({ content: 'There was an error while executing this command!', ephemeral: true })
-			.setDescription(`  There was an error while executing this command!  `)
+			.setDescription(`There was an error while executing this command!  `)
+			.addFields({ name: 'Support Server', value: support, inline: true })
 			.setTimestamp()
-			.setFooter({ text: `By @nothealthy - youtube channel`, iconURL: 'attachment://' + pic });
+			.setFooter({ text: `By @nothealthy - youtube channel`, iconURL: 'attachment://' + logo });
 		if (interaction.replied || interaction.deferred) {
-
-			await interaction.followUp({ embeds: [exampleEmbed], files: [file] });
+			await interaction.followUp({ embeds: [exampleEmbed], files: [file] ,ephemeral: true });
 		} else {
-			await interaction.reply({ embeds: [exampleEmbed], files: [file] });
+			await interaction.reply({ embeds: [exampleEmbed], files: [file] ,ephemeral: true });
 		}
 	}
 });
