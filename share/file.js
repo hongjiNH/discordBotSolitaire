@@ -1,9 +1,4 @@
-require('dotenv').config();
-
-const botName = process.env.botName
-const logo=process.env.logo
-
-
+const commonWord=require("./index");
 const { AttachmentBuilder} = require("discord.js");
 
-module.exports=  file = new AttachmentBuilder('../'+botName+'/assets/'+logo);
+module.exports=  file = new AttachmentBuilder('../'+commonWord.botName+'/assets/'+commonWord.logo);

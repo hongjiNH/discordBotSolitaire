@@ -10,7 +10,7 @@ module.exports = {
         .setDescription("List of command for bot: " + commonWord.botName),
     async execute(interaction) {
         defaultEmbed.data
-        .setTitle("The list of the command for bot: " +commonWord.botName)
+        .setTitle("Command List")
         .setFields(
             { name: 'Ping with the bot', value: codeBlock("/ping")},
             { name: 'Support Server', value: codeBlock("/support")},
@@ -18,7 +18,8 @@ module.exports = {
             { name: 'Version', value: codeBlock("/version")},
             { name: 'Solitaire', value: codeBlock("/solitaire") },
             { name: 'Count Down', value: codeBlock("/countdown") }
-        );
+        )
+        .setDescription("The list of the command for bot: " +commonWord.botName);
         return interaction.reply({ embeds: [defaultEmbed.data], files: [file] });
     },
 };
