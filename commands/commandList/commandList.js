@@ -20,7 +20,8 @@ module.exports = {
             { name: 'Support Server', value: codeBlock("/support")},
             { name: 'The command-(obviously you know this else how you see this)', value: codeBlock("/command") },
             { name: 'Version', value: codeBlock("/version")},
-            { name: 'Solitaire', value: codeBlock("/solitaire") }
+            { name: 'Solitaire', value: codeBlock("/solitaire") },
+            { name: 'Count Down', value: codeBlock("/countdown") }
         );
         return interaction.reply({ embeds: [defaultEmbed.data], files: [file] });
     },
