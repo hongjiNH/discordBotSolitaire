@@ -7,7 +7,9 @@ const file=require('./share/file');
 const { Client, Collection, Events, GatewayIntentBits, AttachmentBuilder } = require('discord.js');
 
 const token = process.env.token;
-const support = process.env.support
+
+const commonWord=require('./share/index');
+
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.commands = new Collection();
@@ -48,7 +50,7 @@ client.on(Events.InteractionCreate, async interaction => {
 
 		errorEmbed.data
 		.setDescription(`There was an error while executing this command!  `)
-		.addFields({ name: 'Support Server', value: support, inline: true })
+		.setFields({ name: 'Support Server', value: commonWord.support, inline: true })
 
 		if (interaction.replied || interaction.deferred) {
 			await interaction.followUp({ embeds: [	errorEmbed.data], files: [file] ,ephemeral: true });

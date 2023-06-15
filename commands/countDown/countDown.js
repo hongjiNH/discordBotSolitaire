@@ -1,6 +1,3 @@
-
-require('dotenv').config();
-
 const defaultEmbed = require('../../share/defaultEmbed');
 const file = require('../../share/file')
 const formatTime = require('../../share/formatTime');

@@ -1,11 +1,6 @@
-require('dotenv').config();
-
-
 const defaultEmbed =require('../../share/defaultEmbed');
-const file=require('../../share/file')
-
-const botName = process.env.botName
-const logo = process.env.logo
+const file=require('../../share/file');
+const {botName,logo}=require('../../share/index');
 
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, userMention } = require("discord.js");
 
