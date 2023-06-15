@@ -1,23 +1,21 @@
 require('dotenv').config();
 
+const errorEmbed =require('../../share/errorEmbed');
+const file=require('../../share/file')
+
 const support = process.env.support
 const botName = process.env.botName
-const logo=process.env.logo
 
-const { SlashCommandBuilder,EmbedBuilder,AttachmentBuilder  } = require("discord.js");
-const file = new AttachmentBuilder('../'+botName+'/assets/'+logo);
-
+const { SlashCommandBuilder  } = require("discord.js");
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('support')
 		.setDescription("Discord support server for " + botName),
 	async execute(interaction) {
-		const exampleEmbed = new EmbedBuilder()
-			.setColor(0x0099FF)
-			.setDescription("Contact the support by joining " )
-			.addFields({ name: 'Support Server', value: support, inline: true })
-			.setTimestamp()
-			.setFooter({ text: `By @nothealthy - youtube channel`, iconURL: 'attachment://'+logo });
-		return interaction.reply({ embeds: [exampleEmbed], files: [file] });
+		errorEmbed.data
+		.setDescription("Contact the support by joining " )
+		.addFields({ name: 'Support Server', value: support, inline: true })
+
+		return interaction.reply({ embeds: [errorEmbed.data], files: [file] });
 	},
 };

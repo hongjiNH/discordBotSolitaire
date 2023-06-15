@@ -1,10 +1,13 @@
 require('dotenv').config();
 
+
+const defaultEmbed =require('../../share/defaultEmbed');
+const file=require('../../share/file')
+
 const botName = process.env.botName
 const logo = process.env.logo
 
-const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, AttachmentBuilder, userMention } = require("discord.js");
-const file = new AttachmentBuilder('../' + botName + '/assets/' + logo);
+const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, userMention } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -63,18 +66,13 @@ module.exports = {
             const row = new ActionRowBuilder()
                 .addComponents(add, remove);
 
-            const exampleEmbed = new EmbedBuilder()
-                .setColor(0x0099FF)
-                
-                .setDescription(question + "?")
-                .setTimestamp()
-                .setFooter({ text: `By @nothealthy - youtube channel`, iconURL: 'attachment://' + logo });
+            defaultEmbed.data.setDescription(question + "?");
 
             if(hour===null){
-                exampleEmbed.setTitle(title+" Form will end on "+day+" day/s")
+                defaultEmbed.data.setTitle(title+" Form will end on "+day+" day/s")
             }
             else{
-                exampleEmbed.setTitle(title+" Form will end on "+hour+" hour/s")
+                defaultEmbed.data.setTitle(title+" Form will end on "+hour+" hour/s")
             }
             // console.log(list.length);
             // console.log(list.length == 0);
@@ -83,19 +81,19 @@ module.exports = {
 
 
             if (list.length !== 0) {
-                exampleEmbed.addFields(
+                defaultEmbed.data.addFields(
                     { name: '01', value: ".", inline: true },
                     { name: '02', value: "." },
                     { name: '03', value: "." }
                 );
             }
             else {
-                exampleEmbed.addFields(
+                defaultEmbed.data.addFields(
                     { name: 'No one yet', value: "\u200B", inline: true },
                 );
             }
 
-            const response = await interaction.reply({ embeds: [exampleEmbed], files: [file], components: [row] });
+            const response = await interaction.reply({ embeds: [defaultEmbed.data], files: [file], components: [row] });
             const collectorFilter = i => i.user.id === interaction.user.id;
             try {
                 // const confirmation = await response.awaitMessageComponent({ filter: collectorFilter, time: 60_000 });
@@ -113,10 +111,10 @@ module.exports = {
                         .setFooter({ text: `By @nothealthy - youtube channel`, iconURL: 'attachment://' + logo });
 
                         if(hour===null){
-                            listEmbed.setTitle(title+" Form will end on "+day+" day/s")
+                            listEmbed.setTitle(title+"  will end on "+day+" day/s")
                         }
                         else{
-                            listEmbed.setTitle(title+" Form will end on "+hour+" hour/s")
+                            listEmbed.setTitle(title+"  will end on "+hour+" hour/s")
                         }
 
 
@@ -127,8 +125,8 @@ module.exports = {
                 }
             } catch (e) {
                 console.log(e);
-                exampleEmbed.setDescription('Confirmation not received within x minute, cancelling').setFields();
-                await interaction.editReply({ embeds: [exampleEmbed], files: [file] });
+                defaultEmbed.data.setDescription('Confirmation not received within x minute, cancelling').setFields();
+                await interaction.editReply({ embeds: [defaultEmbed.data], files: [file] });
             }
         }
     },

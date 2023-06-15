@@ -1,17 +1,17 @@
+
 require('dotenv').config();
+
 const defaultEmbed =require('../../share/defaultEmbed');
 const file=require('../../share/file')
 
-const version = process.env.version
-
-const { SlashCommandBuilder} = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('version')
-		.setDescription("Version of the current bot "),
+		.setName('ping')
+		.setDescription('Replies with Pong!'),
 	async execute(interaction) {
-		defaultEmbed.data.setDescription("The current version of the bot is: " + `**${version}**`)
+		defaultEmbed.data.setDescription('Pong');
 		return interaction.reply({ embeds: [defaultEmbed.data], files: [file] });
 	},
 };

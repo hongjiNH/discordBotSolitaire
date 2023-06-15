@@ -1,13 +1,13 @@
 require('dotenv').config();
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, Collection, Events, GatewayIntentBits, EmbedBuilder, AttachmentBuilder } = require('discord.js');
+const errorEmbed=require("./share/errorEmbed");
+const file=require('./share/file');
 
-const botName = process.env.botName
+const { Client, Collection, Events, GatewayIntentBits, AttachmentBuilder } = require('discord.js');
+
 const token = process.env.token;
 const support = process.env.support
-const logo=process.env.logo
-const file = new AttachmentBuilder('../' + botName + '/assets/' + logo);
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.commands = new Collection();
@@ -43,18 +43,17 @@ client.on(Events.InteractionCreate, async interaction => {
 	try {
 		await command.execute(interaction);
 	} catch (error) {
+		
 		console.error(error);
-		const exampleEmbed = new EmbedBuilder()
-			.setColor(0xED4245)
-			//:failed:
-			.setDescription(`There was an error while executing this command!  `)
-			.addFields({ name: 'Support Server', value: support, inline: true })
-			.setTimestamp()
-			.setFooter({ text: `By @nothealthy - youtube channel`, iconURL: 'attachment://' + logo });
+
+		errorEmbed.data
+		.setDescription(`There was an error while executing this command!  `)
+		.addFields({ name: 'Support Server', value: support, inline: true })
+
 		if (interaction.replied || interaction.deferred) {
-			await interaction.followUp({ embeds: [exampleEmbed], files: [file] ,ephemeral: true });
+			await interaction.followUp({ embeds: [	errorEmbed.data], files: [file] ,ephemeral: true });
 		} else {
-			await interaction.reply({ embeds: [exampleEmbed], files: [file] ,ephemeral: true });
+			await interaction.reply({ embeds: [	errorEmbed.data], files: [file] ,ephemeral: true });
 		}
 	}
 });
