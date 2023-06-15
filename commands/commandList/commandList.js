@@ -4,7 +4,6 @@ const defaultEmbed =require('../../share/defaultEmbed');
 const file=require('../../share/file')
 
 const botName = process.env.botName
-const logo = process.env.logo
 
 const { SlashCommandBuilder, codeBlock } = require("discord.js");
 
