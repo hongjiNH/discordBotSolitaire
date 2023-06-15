@@ -14,7 +14,7 @@ module.exports = {
     async execute(interaction) {
         defaultEmbed.data
         .setTitle("The list of the command for bot: " +botName)
-        .addFields(
+        .setFields(
             { name: 'Ping with the bot', value: codeBlock("/ping")},
             { name: 'Support Server', value: codeBlock("/support")},
             { name: 'The command-(obviously you know this else how you see this)', value: codeBlock("/command") },

@@ -106,9 +106,7 @@ module.exports = {
                     .setDescription("Set to false if you dont want to be alerted at completion")
                     .setRequired(true))),
 
-    async execute(interaction) {
-
-        console.log(interaction.options);
+    async execute(interaction,client) {
 
         const messagestart = interaction.options.getString('messagestart');
         const messageend = interaction.options.getString('messageend');
@@ -137,7 +135,6 @@ module.exports = {
                 defaultEmbed.data.setTitle("Your count down timer is set to: " + interaction.options.getInteger('weeks') + ' week(s)');
                 timeInMilliseconds += interaction.options.getInteger('weeks') * 7 * 24 * 60 * 60 * 1000;
                 break;
-
         }
 
         if (public === false) {
@@ -146,8 +143,6 @@ module.exports = {
         else {
             await interaction.reply({ embeds: [defaultEmbed.data], files: [file] });
         }
-
-
 
         let countdown = timeInMilliseconds;
 
@@ -158,20 +153,44 @@ module.exports = {
             const remainingTime = formatTime(countdown);
 
             defaultEmbed.data
-            .setTitle(`Countdown: ${remainingTime} remaining.`)
-            .setFields({ name: "Your message", value: messagestart });
-          
+                .setTitle(`Countdown: ${remainingTime} remaining.`)
+                .setFields({ name: "Your message", value: messagestart });
+
             interaction.editReply({ embeds: [defaultEmbed.data] });
 
             if (countdown <= 0) {
                 clearInterval(countdownInterval);
 
-                defaultEmbed.data.setTitle('Count down timer has stop.').setFields({name:'Your message',value:messageend});
+                defaultEmbed.data.setTitle('Count down timer has stop.').setFields({ name: 'Your message', value: messageend });
 
                 if (public === false) {
-                    interaction.editReply({ embeds: [defaultEmbed.data], ephemeral: true });
+                    // user wanted to receive privately, in the channel
+                    if (alert === false) {
+                        interaction.editReply({ embeds: [defaultEmbed.data], ephemeral: true });
+                    }
+                    else {
+                        // user wanted to receive it in their dm
+                        client.users.fetch(interaction.user.id, false).then((user) => {
+                            user.send({ embeds: [defaultEmbed.data]});
+                           });
+                        
+                           interaction.editReply({ embeds: [defaultEmbed.data], ephemeral: true });
+                    }
                 }
                 else {
+                    //user wanted to receive it publicly in the channel
+                    if (alert === false) {
+                        interaction.editReply({ embeds: [defaultEmbed.data] });
+                    }
+                    else {
+                        //user  wanted ot receive it in their dm
+                        client.users.fetch(interaction.user.id, false).then((user) => {
+                            user.send({ embeds: [defaultEmbed.data]});
+                           });
+                        
+                           interaction.editReply({ embeds: [defaultEmbed.data] });
+                    }
+
                     interaction.editReply({ embeds: [defaultEmbed.data] });
                 }
 

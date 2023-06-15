@@ -11,7 +11,7 @@ module.exports = {
 		.setName('ping')
 		.setDescription('Replies with Pong!'),
 	async execute(interaction) {
-		defaultEmbed.data.setDescription('Pong');
+		defaultEmbed.data.setDescription('Pong').setFields().setTitle("Bot say ...");
 		return interaction.reply({ embeds: [defaultEmbed.data], files: [file] });
 	},
 };

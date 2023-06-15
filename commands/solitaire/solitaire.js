@@ -88,7 +88,7 @@ module.exports = {
                 );
             }
             else {
-                defaultEmbed.data.addFields(
+                defaultEmbed.data.setFields(
                     { name: 'No one yet', value: "\u200B", inline: true },
                 );
             }
@@ -107,7 +107,7 @@ module.exports = {
                         .setColor(0x0099FF)
                         .setDescription(question + "?")
                         .setTimestamp()
-                        .addFields({ name: list[0], value: "\u200B", inline: true })
+                        .setFields({ name: list[0], value: "\u200B", inline: true })
                         .setFooter({ text: `By @nothealthy - youtube channel`, iconURL: 'attachment://' + logo });
 
                         if(hour===null){

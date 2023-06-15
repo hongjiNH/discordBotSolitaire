@@ -11,7 +11,11 @@ module.exports = {
 		.setName('version')
 		.setDescription("Version of the current bot "),
 	async execute(interaction) {
-		defaultEmbed.data.setDescription("The current version of the bot is: " + `**${version}**`)
+		defaultEmbed.data
+		.setTitle("Version")
+		.setFields()
+		.setDescription("The current version of the bot is: " + `**${version}**`)
+
 		return interaction.reply({ embeds: [defaultEmbed.data], files: [file] });
 	},
 };

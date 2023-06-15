@@ -13,8 +13,10 @@ module.exports = {
 		.setDescription("Discord support server for " + botName),
 	async execute(interaction) {
 		errorEmbed.data
+		.setTitle("Support server")
 		.setDescription("Contact the support by joining " )
-		.addFields({ name: 'Support Server', value: support, inline: true })
+		.setFields({ name: 'Support Server', value: support, inline: true })
+		
 
 		return interaction.reply({ embeds: [errorEmbed.data], files: [file] });
 	},
