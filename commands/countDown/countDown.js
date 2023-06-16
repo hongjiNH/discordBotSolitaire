@@ -1,6 +1,7 @@
 const defaultEmbed = require('../../share/defaultEmbed');
 const file = require('../../share/file')
 const formatTime = require('../../share/formatTime');
+const conmmonVariable=require('../../share/index');
 
 const interval = 60000;
 
@@ -8,7 +9,7 @@ const { SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('countdown')
+        .setName(conmmonVariable.countdown)
         .setDescription('Countdown to what you tells it to.')
         .addSubcommand(subcommand =>
             subcommand

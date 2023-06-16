@@ -1,6 +1,6 @@
 const defaultEmbed = require('../../share/defaultEmbed');
 const file = require('../../share/file');
-const { botName, logo } = require('../../share/index');
+const conmmonVariable=require('../../share/index');
 const formatTime = require('../../share/formatTime');
 
 const interval = 60000;
@@ -8,9 +8,10 @@ const interval = 60000;
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, userMention } = require("discord.js");
 
 module.exports = {
+    
     data: new SlashCommandBuilder()
-        .setName('solitaire')
-        .setDescription("Ask a question and allowing user to click to add their username in " + botName)
+        .setName(conmmonVariable.solitaire)
+        .setDescription("Ask a question and allowing user to click to add their username in " + conmmonVariable.botName)
         .addSubcommand(subcommand =>
             subcommand
                 .setName('day')
@@ -92,14 +93,13 @@ module.exports = {
                     break;
             }
 
-
             const addButton = new ButtonBuilder()
-                .setCustomId('add')
+                .setCustomId('addUser_'+conmmonVariable.solitaire)
                 .setLabel('add me in')
                 .setStyle(ButtonStyle.Primary);
 
             const removeButton = new ButtonBuilder()
-                .setCustomId('remove')
+                .setCustomId('removeUser_'+conmmonVariable.solitaire)
                 .setLabel('remove')
                 .setStyle(ButtonStyle.Danger);
 
@@ -217,7 +217,7 @@ module.exports = {
             const collectorFilter = i => i.user.id === interaction.user.id;
             const confirmation = await response.awaitMessageComponent({ filter: collectorFilter });
 
-            if (confirmation.customId === 'add') {
+            if (confirmation.customId ==='addUser_'+conmmonVariable.solitaire) {
                 list.push(interaction.user.username);
                 console.log(list);
 
@@ -238,7 +238,7 @@ module.exports = {
                 await interaction.editReply({ embeds: [defaultEmbed.data], files: [file], components: [row] });
 
             }
-            else if (confirmation.customId === 'remove') {
+            else if (confirmation.customId === 'removeUser_'+conmmonVariable.solitaire) {
              
             }
 
@@ -280,4 +280,3 @@ module.exports = {
     },
 
 };
-

@@ -6,7 +6,7 @@ const { SlashCommandBuilder} = require("discord.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('version')
+		.setName(conmmonVariable.version)
 		.setDescription("Version of the current bot "),
 	async execute(interaction) {
 		defaultEmbed.data

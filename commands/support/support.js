@@ -6,7 +6,7 @@ const conmmonVariable=require('../../share/index');
 const { SlashCommandBuilder  } = require("discord.js");
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('support')
+		.setName(conmmonVariable.support)
 		.setDescription("Discord support server for " + conmmonVariable.botName),
 	async execute(interaction) {
 		errorEmbed.data
