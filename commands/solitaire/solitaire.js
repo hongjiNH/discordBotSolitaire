@@ -100,6 +100,7 @@ module.exports = {
                     break;
             }
 
+            
             const addButton = new ButtonBuilder()
                 .setCustomId('addUser_' + conmmonVariable.solitaire)
                 .setLabel('add me in')
@@ -171,7 +172,7 @@ module.exports = {
             while (countdown >= 0) {
 
                 const confirmation = await response.awaitMessageComponent();
-                
+
                 if (confirmation.customId === 'addUser_' + conmmonVariable.solitaire) {
                     if (list.indexOf(confirmation.user.username) === -1) {
                         list.push(confirmation.user.username);
