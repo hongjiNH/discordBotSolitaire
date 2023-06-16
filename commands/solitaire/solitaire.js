@@ -170,22 +170,22 @@ module.exports = {
 
             while (countdown >= 0) {
 
-                const collectorFilter = i => i.user.id === interaction.user.id;
-                const confirmation = await response.awaitMessageComponent({ filter: collectorFilter });
-                console.log(list);
-
+                const confirmation = await response.awaitMessageComponent();
+                
                 if (confirmation.customId === 'addUser_' + conmmonVariable.solitaire) {
-
-                    if (list.indexOf(interaction.user.username) === -1) {
-                        list.push(interaction.user.username);
+                    if (list.indexOf(confirmation.user.username) === -1) {
+                        list.push(confirmation.user.username);
                     }
                 }
                 else if (confirmation.customId === 'removeUser_' + conmmonVariable.solitaire) {
 
-                    if (list.indexOf(interaction.user.username) !== -1) {
-                        list.map(name => name === interaction.user.username ? '' : temList.push(name));
+                    if (list.indexOf(confirmation.user.username) !== -1) {
+                        console.log(confirmation.user.username);
+                        list.map(name => name === confirmation.user.username ? '' : temList.push(name));
+                        console.log(temList);
                         list = [];
                         temList.map(name => list.push(name));
+                        temList=[];
                     }
                 }
 
