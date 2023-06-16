@@ -9,6 +9,7 @@ const { Client, Collection, Events, GatewayIntentBits, AttachmentBuilder } = req
 const token = process.env.token;
 
 const conmmonVariable=require('./share/index');
+const autoUpdate=require('./deploy-commands')
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -34,11 +35,17 @@ for (const folder of commandFolders) {
 
 client.once(Events.ClientReady, c => {
 	console.log(`Ready! Logged in as ${c.user.tag}`);
+
+
+	const Guilds = client.guilds.cache.map(guild => guild.id);
+	autoUpdate(Guilds);
+    console.log(Guilds);
+
+
 });
 
 client.on(Events.InteractionCreate, async interaction => {
-	// console.log(interaction);
-	// console.log('-------------------------------------');
+
 	if (!interaction.isChatInputCommand()) return;
 
 	const command = client.commands.get(interaction.commandName);
@@ -52,7 +59,7 @@ client.on(Events.InteractionCreate, async interaction => {
 
 		errorEmbed.data
 		.setDescription(`There was an error while executing this command!  `)
-		.setFields({ name: 'Support Server', value: conmmonVariable.support, inline: true })
+		.setFields({ name: 'Support Server', value: conmmonVariable.supportLink, inline: true })
 
 		if (interaction.replied || interaction.deferred) {
 			await interaction.followUp({ embeds: [errorEmbed.data], files: [file] ,ephemeral: true });

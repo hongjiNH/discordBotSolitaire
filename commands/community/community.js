@@ -6,13 +6,13 @@ const conmmonVariable=require('../../share/index');
 const { SlashCommandBuilder  } = require("discord.js");
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName(conmmonVariable.support)
-		.setDescription("Discord support server for " + conmmonVariable.botName),
+		.setName(conmmonVariable.community)
+		.setDescription("@nothealthy community server " ),
 	async execute(interaction) {
 		errorEmbed.data
-		.setTitle("Support server")
+		.setTitle("Community server")
 		.setDescription("Contact the support by joining " )
-		.setFields({ name: 'Support Server', value: conmmonVariable.supportLink, inline: true })
+		.setFields({ name: 'Community Server', value: conmmonVariable.communityLink, inline: true })
 		
 
 		return interaction.reply({ embeds: [errorEmbed.data], files: [file] });
