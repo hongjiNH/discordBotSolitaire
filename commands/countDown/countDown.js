@@ -2,7 +2,7 @@ const defaultEmbed = require('../../share/defaultEmbed');
 const file = require('../../share/file')
 const formatTime = require('../../share/formatTime');
 
-const interver = 60000;
+const interval = 60000;
 
 const { SlashCommandBuilder } = require("discord.js");
 
@@ -145,7 +145,7 @@ module.exports = {
 
         const countdownInterval = setInterval(() => {
 
-            countdown -= interver;
+            countdown -= interval;
 
             const remainingTime = formatTime(countdown);
 
@@ -194,7 +194,7 @@ module.exports = {
             }
 
 
-        }, interver)
+        }, interval)
     },
 
 };

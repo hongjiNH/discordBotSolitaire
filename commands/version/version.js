@@ -1,6 +1,6 @@
 const defaultEmbed =require('../../share/defaultEmbed');
 const file=require('../../share/file')
-const commonWord=require('../../share/index');
+const conmmonVariable=require('../../share/index');
 
 const { SlashCommandBuilder} = require("discord.js");
 
@@ -12,7 +12,7 @@ module.exports = {
 		defaultEmbed.data
 		.setTitle("Version")
 		.setFields()
-		.setDescription("The current version of the bot is: " + `**${commonWord.version}**`)
+		.setDescription("The current version of the bot is: " + `**${conmmonVariable.version}**`)
 
 		return interaction.reply({ embeds: [defaultEmbed.data], files: [file] });
 	},

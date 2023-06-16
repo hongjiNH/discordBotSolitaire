@@ -8,7 +8,7 @@ const { Client, Collection, Events, GatewayIntentBits, AttachmentBuilder } = req
 
 const token = process.env.token;
 
-const commonWord=require('./share/index');
+const conmmonVariable=require('./share/index');
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -50,12 +50,12 @@ client.on(Events.InteractionCreate, async interaction => {
 
 		errorEmbed.data
 		.setDescription(`There was an error while executing this command!  `)
-		.setFields({ name: 'Support Server', value: commonWord.support, inline: true })
+		.setFields({ name: 'Support Server', value: conmmonVariable.support, inline: true })
 
 		if (interaction.replied || interaction.deferred) {
-			await interaction.followUp({ embeds: [	errorEmbed.data], files: [file] ,ephemeral: true });
+			await interaction.followUp({ embeds: [errorEmbed.data], files: [file] ,ephemeral: true });
 		} else {
-			await interaction.reply({ embeds: [	errorEmbed.data], files: [file] ,ephemeral: true });
+			await interaction.reply({ embeds: [errorEmbed.data], files: [file] ,ephemeral: true });
 		}
 	}
 });

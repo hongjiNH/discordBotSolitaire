@@ -1,13 +1,13 @@
 const defaultEmbed =require('../../share/defaultEmbed');
 const file=require('../../share/file');
-const commonWord=require('../../share/index');
+const conmmonVariable=require('../../share/index');
 
 const { SlashCommandBuilder, codeBlock } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('command')
-        .setDescription("List of command for bot: " + commonWord.botName),
+        .setDescription("List of command for bot: " + conmmonVariable.botName),
     async execute(interaction) {
         defaultEmbed.data
         .setTitle("Command List")
@@ -19,7 +19,7 @@ module.exports = {
             { name: 'Solitaire', value: codeBlock("/solitaire") },
             { name: 'Count Down', value: codeBlock("/countdown") }
         )
-        .setDescription("The list of the command for bot: " +commonWord.botName);
+        .setDescription("The list of the command for bot: " +conmmonVariable.botName);
         return interaction.reply({ embeds: [defaultEmbed.data], files: [file] });
     },
 };
