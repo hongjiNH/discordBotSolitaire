@@ -16,8 +16,8 @@ module.exports = {
             { name: 'Support Server', value: codeBlock("/"+conmmonVariable.support)},
             { name: 'The command-(obviously you know this else how you see this)', value: codeBlock("/"+conmmonVariable.command) },
             { name: 'Version', value: codeBlock("/"+conmmonVariable.version)},
-            { name: 'Solitaire', value: codeBlock("/"+conmmonVariable.solitaire) },
-            { name: 'Count Down', value: codeBlock("/"+conmmonVariable.countdown) }
+            { name: 'List that allow user to add /remove themself', value: codeBlock("/"+conmmonVariable.solitaire) },
+            { name: 'Count Down timer', value: codeBlock("/"+conmmonVariable.countdown) }
         )
         .setDescription("The list of the command for bot: " +conmmonVariable.botName);
         return interaction.reply({ embeds: [defaultEmbed.data], files: [file] });

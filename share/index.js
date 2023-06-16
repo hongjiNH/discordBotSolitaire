@@ -9,7 +9,7 @@ module.exports.interval=6000;
 module.exports.communityLink="https://discord.gg/KYqnX3VTP9";
 
 //bot command
-module.exports.solitaire="solitaire";
+module.exports.solitaire="list";
 module.exports.ping="ping";
 module.exports.support="support";
 module.exports.command="command";
