@@ -1,11 +1,11 @@
 const defaultEmbed = require('../../share/defaultEmbed');
 const file = require('../../share/file')
 const formatTime = require('../../share/formatTime');
-const conmmonVariable=require('../../share/index');
+const conmmonVariable = require('../../share/index');
 
 const interval = 60000;
 
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder,userMention  } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -31,8 +31,8 @@ module.exports = {
                 .addBooleanOption(option => option.setName('public')
                     .setDescription("Set to false if you dont want others to see this")
                     .setRequired(true))
-                .addBooleanOption(option => option.setName('alert')
-                    .setDescription("Set to false if you dont want to be alerted at completion")
+                .addBooleanOption(option => option.setName('directmessage')
+                    .setDescription("Set to false if you dont want to be direct messaged at completion")
                     .setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand
@@ -54,8 +54,8 @@ module.exports = {
                 .addBooleanOption(option => option.setName('public')
                     .setDescription("Set to false if you dont want others to see this")
                     .setRequired(true))
-                .addBooleanOption(option => option.setName('alert')
-                    .setDescription("Set to false if you dont want to be alerted at completion")
+                .addBooleanOption(option => option.setName('directmessage')
+                    .setDescription("Set to false if you dont want to be direct messaged at completion")
                     .setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand
@@ -77,8 +77,8 @@ module.exports = {
                 .addBooleanOption(option => option.setName('public')
                     .setDescription("Set to false if you dont want others to see this")
                     .setRequired(true))
-                .addBooleanOption(option => option.setName('alert')
-                    .setDescription("Set to false if you dont want to be alerted at completion")
+                .addBooleanOption(option => option.setName('directmessage')
+                    .setDescription("Set to false if you dont want to be direct messaged at completion")
                     .setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand
@@ -100,16 +100,16 @@ module.exports = {
                 .addBooleanOption(option => option.setName('public')
                     .setDescription("Set to false if you dont want others to see this")
                     .setRequired(true))
-                .addBooleanOption(option => option.setName('alert')
-                    .setDescription("Set to false if you dont want to be alerted at completion")
+                .addBooleanOption(option => option.setName('directmessage')
+                    .setDescription("Set to false if you dont want to be direct messaged at completion")
                     .setRequired(true))),
 
-    async execute(interaction,client) {
+    async execute(interaction, client) {
 
         const messagestart = interaction.options.getString('messagestart');
         const messageend = interaction.options.getString('messageend');
         const public = interaction.options.getBoolean('public');
-        const alert = interaction.options.getBoolean('alert');
+        const directmessage = interaction.options.getBoolean('directmessage');
 
         let timeInMilliseconds = 0;
 
@@ -163,30 +163,30 @@ module.exports = {
 
                 if (public === false) {
                     // user wanted to receive privately, in the channel
-                    if (alert === false) {
+                    if (directmessage === false) {
                         interaction.editReply({ embeds: [defaultEmbed.data], ephemeral: true });
                     }
                     else {
                         // user wanted to receive it in their dm
                         client.users.fetch(interaction.user.id, false).then((user) => {
-                            user.send({ embeds: [defaultEmbed.data]});
-                           });
-                        
-                           interaction.editReply({ embeds: [defaultEmbed.data], ephemeral: true });
+                            user.send({ embeds: [defaultEmbed.data] });
+                        });
+
+                        interaction.editReply({ embeds: [defaultEmbed.data], ephemeral: true });
                     }
                 }
                 else {
                     //user wanted to receive it publicly in the channel
-                    if (alert === false) {
+                    if (directmessage === false) {
                         interaction.editReply({ embeds: [defaultEmbed.data] });
                     }
                     else {
                         //user  wanted ot receive it in their dm
                         client.users.fetch(interaction.user.id, false).then((user) => {
-                            user.send({ embeds: [defaultEmbed.data]});
-                           });
-                        
-                           interaction.editReply({ embeds: [defaultEmbed.data] });
+                            user.send({ embeds: [defaultEmbed.data] });
+                        });
+
+                        interaction.editReply({ embeds: [defaultEmbed.data] });
                     }
 
                     interaction.editReply({ embeds: [defaultEmbed.data] });

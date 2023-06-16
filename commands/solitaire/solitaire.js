@@ -28,7 +28,10 @@ module.exports = {
                     .setDescription('How many day/s')
                     .setRequired(true)
                     .setMinValue(1)
-                    .setMaxValue(30)))
+                    .setMaxValue(30))
+                .addBooleanOption(option => option.setName('directmessage')
+                    .setDescription("Set to false if you dont want to be direct messaged at completion")
+                    .setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('hour')
@@ -45,7 +48,10 @@ module.exports = {
                     .setDescription('How many hour/s')
                     .setRequired(true)
                     .setMinValue(1)
-                    .setMaxValue(24)))
+                    .setMaxValue(24))
+                .addBooleanOption(option => option.setName('directmessage')
+                    .setDescription("Set to false if you dont want to be direct messaged at completion")
+                    .setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('minute')
@@ -62,19 +68,22 @@ module.exports = {
                     .setDescription('How many mintue(s)')
                     .setRequired(true)
                     .setMinValue(1)
-                    .setMaxValue(60))),
+                    .setMaxValue(60))
+                .addBooleanOption(option => option.setName('directmessage')
+                    .setDescription("Set to false if you dont want to be direct messaged at completion")
+                    .setRequired(true))),
 
     async execute(interaction, client) {
         {
 
             const title = interaction.options.getString('title');
             const question = interaction.options.getString('question');
+            const directmessage = interaction.options.getBoolean('directmessage');
 
             let list = [];
             let temList = [];
 
             let timeInMilliseconds = 0;
-
 
             switch (interaction.options._subcommand) {
                 case 'day':
@@ -150,39 +159,11 @@ module.exports = {
 
                     interaction.editReply({ embeds: [defaultEmbed.data], components: [row] });
 
-                    // if (public === false) {
-                    //     // user wanted to receive privately, in the channel
-                    //     if (alert === false) {
-                    //         interaction.editReply({ embeds: [defaultEmbed.data], ephemeral: true });
-                    //     }
-                    //     else {
-                    //         // user wanted to receive it in their dm
-                    //         client.users.fetch(interaction.user.id, false).then((user) => {
-                    //             user.send({ embeds: [defaultEmbed.data]});
-                    //            });
-
-                    //            interaction.editReply({ embeds: [defaultEmbed.data], ephemeral: true });
-                    //     }
-                    // }
-                    // else {
-                    //     //user wanted to receive it publicly in the channel
-                    //     if (alert === false) {
-                    //         interaction.editReply({ embeds: [defaultEmbed.data] });
-                    //     }
-                    //     else {
-                    //         //user  wanted ot receive it in their dm
-                    //         client.users.fetch(interaction.user.id, false).then((user) => {
-                    //             user.send({ embeds: [defaultEmbed.data]});
-                    //            });
-
-                    //            interaction.editReply({ embeds: [defaultEmbed.data] });
-                    //     }
-
-                    //     interaction.editReply({ embeds: [defaultEmbed.data] });
-                    // }
-
-                }
-                else {
+                    if (directmessage === true) {
+                        client.users.fetch(interaction.user.id, false).then((user) => {
+                            user.send({ embeds: [defaultEmbed.data] });
+                        })
+                    }
 
                 }
             }, interval)
@@ -202,9 +183,9 @@ module.exports = {
                 else if (confirmation.customId === 'removeUser_' + conmmonVariable.solitaire) {
 
                     if (list.indexOf(interaction.user.username) !== -1) {
-                        list.map(name=>name === interaction.user.username ? '':temList.push(name));
-                        list=[];
-                        temList.map(name=>list.push(name));
+                        list.map(name => name === interaction.user.username ? '' : temList.push(name));
+                        list = [];
+                        temList.map(name => list.push(name));
                     }
                 }
 
@@ -220,8 +201,8 @@ module.exports = {
                         );
                     }
                 }
-                
-                else{
+
+                else {
                     defaultEmbed.data.setFields(
                         { name: 'No one yet', value: "\u200B", inline: true },
                     );
