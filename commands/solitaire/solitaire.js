@@ -1,6 +1,6 @@
 const defaultEmbed = require('../../share/defaultEmbed');
 const file = require('../../share/file');
-const conmmonVariable=require('../../share/index');
+const conmmonVariable = require('../../share/index');
 const formatTime = require('../../share/formatTime');
 
 const interval = 60000;
@@ -8,7 +8,7 @@ const interval = 60000;
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, userMention } = require("discord.js");
 
 module.exports = {
-    
+
     data: new SlashCommandBuilder()
         .setName(conmmonVariable.solitaire)
         .setDescription("Ask a question and allowing user to click to add their username in " + conmmonVariable.botName)
@@ -66,14 +66,12 @@ module.exports = {
 
     async execute(interaction, client) {
         {
+
             const title = interaction.options.getString('title');
             const question = interaction.options.getString('question');
 
-            const hour = interaction.options.getInteger('hours');
-            const day = interaction.options.getInteger('days');
-            const minute = interaction.options.getInteger('minutes');
-
-            const list = [];
+            let list = [];
+            let temList = [];
 
             let timeInMilliseconds = 0;
 
@@ -94,12 +92,12 @@ module.exports = {
             }
 
             const addButton = new ButtonBuilder()
-                .setCustomId('addUser_'+conmmonVariable.solitaire)
+                .setCustomId('addUser_' + conmmonVariable.solitaire)
                 .setLabel('add me in')
                 .setStyle(ButtonStyle.Primary);
 
             const removeButton = new ButtonBuilder()
-                .setCustomId('removeUser_'+conmmonVariable.solitaire)
+                .setCustomId('removeUser_' + conmmonVariable.solitaire)
                 .setLabel('remove')
                 .setStyle(ButtonStyle.Danger);
 
@@ -113,30 +111,6 @@ module.exports = {
             );
 
             const response = await interaction.reply({ embeds: [defaultEmbed.data], files: [file], components: [row] });
-
-
-            // setTimeout(() => {
-            //     // Disable the add and remove buttons
-            //     addButton.setDisabled(true);
-            //     removeButton.setDisabled(true);
-            //     defaultEmbed.data
-            //         .setTitle(title + " is close  ")
-            //         .setFields();
-            //     if (list.length !== 0) {
-            //         for(let i =0;i <list.length;i++){
-            //             defaultEmbed.data.addFields(
-            //                 { name: i+" "+list[i], value: "\u200B", inline: true },
-            //             );
-            //         }
-            //     }
-            //     else {
-            //         defaultEmbed.data.addFields(
-            //             { name: 'No one yet', value: "\u200B", inline: true },
-            //         );
-            //     }
-            //     // Update the message with the disabled buttons
-            //     interaction.editReply({ components: [defaultEmbed.data] });
-            // },timeInMilliseconds);
 
             let countdown = timeInMilliseconds;
 
@@ -213,13 +187,26 @@ module.exports = {
                 }
             }, interval)
 
+            while (countdown >= 0) {
 
-            const collectorFilter = i => i.user.id === interaction.user.id;
-            const confirmation = await response.awaitMessageComponent({ filter: collectorFilter });
-
-            if (confirmation.customId ==='addUser_'+conmmonVariable.solitaire) {
-                list.push(interaction.user.username);
+                const collectorFilter = i => i.user.id === interaction.user.id;
+                const confirmation = await response.awaitMessageComponent({ filter: collectorFilter });
                 console.log(list);
+
+                if (confirmation.customId === 'addUser_' + conmmonVariable.solitaire) {
+
+                    if (list.indexOf(interaction.user.username) === -1) {
+                        list.push(interaction.user.username);
+                    }
+                }
+                else if (confirmation.customId === 'removeUser_' + conmmonVariable.solitaire) {
+
+                    if (list.indexOf(interaction.user.username) !== -1) {
+                        list.map(name=>name === interaction.user.username ? '':temList.push(name));
+                        list=[];
+                        temList.map(name=>list.push(name));
+                    }
+                }
 
                 defaultEmbed.data
                     .setTitle(`${title}, Countdown: ${formatTime(countdown)} remaining.`)
@@ -233,49 +220,15 @@ module.exports = {
                         );
                     }
                 }
+                
+                else{
+                    defaultEmbed.data.setFields(
+                        { name: 'No one yet', value: "\u200B", inline: true },
+                    );
+                }
 
                 await confirmation.update({ embeds: [defaultEmbed.data], files: [file], components: [row] });
-                await interaction.editReply({ embeds: [defaultEmbed.data], files: [file], components: [row] });
-
             }
-            else if (confirmation.customId === 'removeUser_'+conmmonVariable.solitaire) {
-             
-            }
-
-            // try {
-
-            //     // const confirmation = await response.awaitMessageComponent({ filter: collectorFilter, time: 60_000 });
-            //     const collectorFilter = i => i.user.id === interaction.user.id;
-            //     const confirmation = await response.awaitMessageComponent({ filter: collectorFilter });
-
-            //     if (confirmation.customId === 'add') {
-            //         list.push(interaction.user.username);
-            //         console.log(list);
-            //         const listEmbed = new EmbedBuilder()
-            //             .setColor(0x0099FF)
-            //             .setDescription(question + "?")
-            //             .setTimestamp()
-            //             .setFields({ name: "-0 " + list[0], value: "\u200B", inline: true })
-            //             .setFooter({ text: `By @nothealthy - youtube channel`, iconURL: 'attachment://' + logo });
-
-            //         if (hour === null) {
-            //             listEmbed.setTitle(title + "  will end on " + day + " day/s")
-            //         }
-            //         else {
-            //             listEmbed.setTitle(title + "  will end on " + hour + " hour/s")
-            //         }
-
-
-            //         await confirmation.update({ embeds: [listEmbed], files: [file], components: [row] });
-            //     }
-            //     else if (confirmation.customId === 'remove') {
-
-            //     }
-            // } catch (e) {
-            //     console.log(e);
-            //     defaultEmbed.data.setDescription('Confirmation not received within x minute, cancelling').setFields();
-            //     await interaction.editReply({ embeds: [defaultEmbed.data], files: [file] });
-            // }
         }
     },
 
