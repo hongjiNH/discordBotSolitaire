@@ -12,11 +12,30 @@ const commands = [];
 const foldersPath = path.join(__dirname, 'commands');
 const commandFolders = fs.readdirSync(foldersPath);
 
+// Grab all the command/clash of clan folders from the commands directory you created earlier
+const clashOfClanPath = path.join(__dirname, 'commands/clashOfClan');
+const clashOfClanCommandFolders = fs.readdirSync(clashOfClanPath);
 
 module.exports = (guildId) => {
 	for (const folder of commandFolders) {
 		// Grab all the command files from the commands directory you created earlier
 		const commandsPath = path.join(foldersPath, folder);
+		const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+		// Grab the SlashCommandBuilder#toJSON() output of each command's data for deployment
+		for (const file of commandFiles) {
+			const filePath = path.join(commandsPath, file);
+			const command = require(filePath);
+			if ('data' in command && 'execute' in command) {
+				commands.push(command.data.toJSON());
+			} else {
+				console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+			}
+		}
+	}
+
+	for (const folder of clashOfClanCommandFolders) {
+		// Grab all the command/Clash Of Clan files from the commands directory you created earlier
+		const commandsPath = path.join(clashOfClanPath, folder);
 		const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 		// Grab the SlashCommandBuilder#toJSON() output of each command's data for deployment
 		for (const file of commandFiles) {

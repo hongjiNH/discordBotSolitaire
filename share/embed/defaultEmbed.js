@@ -1,4 +1,4 @@
-const conmmonVariable=require('./index')
+const conmmonVariable=require('../index')
 
 const { EmbedBuilder } = require("discord.js");
 

@@ -1,4 +1,4 @@
-const defaultEmbed = require('../../share/defaultEmbed');
+const defaultEmbed = require('../../share/embed/defaultEmbed');
 const file = require('../../share/file');
 const conmmonVariable = require('../../share/index');
 const formatTime = require('../../share/formatTime');
@@ -8,7 +8,6 @@ const interval = 60000;
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, userMention } = require("discord.js");
 
 module.exports = {
-
     data: new SlashCommandBuilder()
         .setName(conmmonVariable.solitaire)
         .setDescription("Ask a question and allowing user to click to add their username in " + conmmonVariable.botName)

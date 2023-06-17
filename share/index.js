@@ -16,3 +16,7 @@ module.exports.command="command";
 module.exports.version="version";
 module.exports.countdown="countdown";
 module.exports.community="community";
+
+//coc command
+module.exports.cocWarLog="cocwarlog";
+module.exports.cocCurrentWarLeague="coccwl";

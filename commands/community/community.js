@@ -1,4 +1,4 @@
-const errorEmbed =require('../../share/errorEmbed');
+const errorEmbed =require('../../share/embed/errorEmbed');
 const file=require('../../share/file')
 
 const conmmonVariable=require('../../share/index');

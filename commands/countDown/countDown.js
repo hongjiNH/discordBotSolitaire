@@ -1,4 +1,4 @@
-const defaultEmbed = require('../../share/defaultEmbed');
+const defaultEmbed = require('../../share/embed/defaultEmbed');
 const file = require('../../share/file')
 const formatTime = require('../../share/formatTime');
 const conmmonVariable = require('../../share/index');
