@@ -18,5 +18,7 @@ module.exports.countdown="countdown";
 module.exports.community="community";
 
 //coc command
-module.exports.cocWarLog="cocwarlog";
-module.exports.cocCurrentWarLeague="coccwl";
+//module.exports.cocWarLog="cocwarlog";
+module.exports.cocCurrentWar="coccw";
+module.exports.cocCurrentWarLeagueGroup="coccwlg";
+module.exports.cocIndividualWarLeague="coccwl";

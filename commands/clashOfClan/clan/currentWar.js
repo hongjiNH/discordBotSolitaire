@@ -7,8 +7,8 @@ const { SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName(conmmonVariable.cocCurrentWarLeague)
-        .setDescription('Retrieve information about clan\'s current clan war league group')
+        .setName(conmmonVariable.cocCurrentWar)
+        .setDescription('Retrieve information about clan\'s current clan war ')
         .addStringOption(option => option.setName('clantag')
             .setDescription('Enter your clan tag etc #2PPP')
             .setMaxLength(10)
