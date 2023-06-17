@@ -21,8 +21,6 @@ module.exports = {
         try {
             const clan = await cocClient.cocClientLogin.getCurrentWar(clanTag);
 
-            //console.log(clan.status);
-
             switch (clan.state) {
                 case "notInWar":
                     defaultEmbed.data.setTitle("Not in war").setDescription('Your clan is not in any war now').setFields();

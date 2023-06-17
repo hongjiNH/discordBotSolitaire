@@ -7,6 +7,7 @@ module.exports.logo =`pic1.png`
 module.exports.donation ="https://streamlabs.com/nothealthyofficial/tip"
 module.exports.interval=6000;
 module.exports.communityLink="https://discord.gg/KYqnX3VTP9";
+module.exports.addBotUrl='https://discord.com/api/oauth2/authorize?client_id=1118062954978492486&permissions=8&scope=bot'
 
 //bot command
 module.exports.solitaire="list";
@@ -16,9 +17,12 @@ module.exports.command="command";
 module.exports.version="version";
 module.exports.countdown="countdown";
 module.exports.community="community";
+module.exports.addbot='addbot';
 
 //coc command
-//module.exports.cocWarLog="cocwarlog";
 module.exports.cocCurrentWar="coccw";
-module.exports.cocCurrentWarLeagueGroup="coccwlg";
-module.exports.cocIndividualWarLeague="coccwl";
+module.exports.cocListMember="coclm";
+//module.exports.cocWarLog="cocwarlog";
+
+// module.exports.cocCurrentWarLeagueGroup="coccwlg";
+// module.exports.cocIndividualWarLeague="coccwl";
