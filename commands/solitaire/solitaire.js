@@ -5,7 +5,7 @@ const formatTime = require('../../share/formatTime');
 
 const interval = 60000;
 
-const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, userMention } = require("discord.js");
+const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, userMention } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -180,9 +180,8 @@ module.exports = {
                 else if (confirmation.customId === 'removeUser_' + conmmonVariable.solitaire) {
 
                     if (list.indexOf(confirmation.user.username) !== -1) {
-                        console.log(confirmation.user.username);
+
                         list.map(name => name === confirmation.user.username ? '' : temList.push(name));
-                        console.log(temList);
                         list = [];
                         temList.map(name => list.push(name));
                         temList=[];

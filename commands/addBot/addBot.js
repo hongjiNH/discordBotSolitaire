@@ -12,7 +12,7 @@ module.exports = {
 		defaultEmbed.data
 		.setTitle("Bot say...")
 		.setFields({name:'URL',value:conmmonVariable.addBotUrl})
-		.setDescription('This will is set to have admin rigth .');
+		.setDescription('This bot is set to have admin rigth .');
 
 		return interaction.reply({ embeds: [defaultEmbed.data], files: [file] });
 	},
