@@ -3,8 +3,9 @@ const fs = require('node:fs');
 const path = require('node:path');
 const errorEmbed = require("./share/embed/errorEmbed");
 const file = require('./share/file');
+const changeStatus=require('./botActivity/botActivity')
 
-const { Client, Collection, Events, GatewayIntentBits, AttachmentBuilder } = require('discord.js');
+const { Client, Collection, Events, GatewayIntentBits  } = require('discord.js');
 
 const token = process.env.token;
 
@@ -59,12 +60,20 @@ for (const folder of clashOfClanCommandFolders) {
 }
 
 
+
 client.once(Events.ClientReady, c => {
 
 	console.log(`Ready! Logged in as ${c.user.tag}`);
 
 	const Guilds = client.guilds.cache.map(guild => guild.id);
+	
 	autoUpdate(Guilds);
+
+	changeStatus(client,Guilds);
+
+	setInterval(() => {
+		changeStatus(client,Guilds);
+	}, 2 * 60 * 60 * 1000);
 
 });
 
