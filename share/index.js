@@ -21,8 +21,9 @@ module.exports.addbot='addbot';
 
 //coc command
 module.exports.cocCurrentWar="coccw";
-module.exports.cocListMember="coclm";
+//module.exports.cocListMember="coclm";
 module.exports.cocGetClanInfo="cocgcl";
+module.exports.cocGoldPass="cocgl";
 //module.exports.cocWarLog="cocwarlog";
 
 // module.exports.cocCurrentWarLeagueGroup="coccwlg";
