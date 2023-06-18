@@ -30,7 +30,8 @@ module.exports = {
         .setTitle("COC Command List")
         .setFields(
             { name: 'Retrieve information about clan\'s current clan war ', value: codeBlock("/"+conmmonVariable.cocCurrentWar) },
-            { name: 'List clan members', value: codeBlock("/"+conmmonVariable.cocListMember) }
+            { name: 'List clan members', value: codeBlock("/"+conmmonVariable.cocListMember) },
+            { name: 'Get clan informaiton', value: codeBlock("/"+conmmonVariable.cocGetClanInfo) }
         )
         .setDescription("The list of clash of clan command for bot: " +conmmonVariable.botName);
         await interaction.followUp({ embeds: [defaultEmbed.data], files: [file] });

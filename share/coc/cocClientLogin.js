@@ -5,12 +5,14 @@ const conmmonVariable=require('../index');
 const { Client } = require('clashofclans.js');
 
 const coctoken = process.env.cocToken;
-const client = new Client({ keys: [coctoken] });
 
+//key login
+const client = new Client({ keys: [coctoken] });
 module.exports.cocClientLogin = client;
 
-module.exports.cocClientError = (errorStatus) => {
 
+module.exports.cocClientError = (errorStatus) => {
+    
     switch (errorStatus) {
         case 400:
             errorEmbed.data
@@ -48,12 +50,12 @@ module.exports.cocClientError = (errorStatus) => {
                 .setDescription(`Service is temprorarily unavailable because of maintenance  `)
                 .setFields()
             break;
-        default:
-            errorEmbed.data
-                .setTitle('Unknown error happened when handling the Clash of clan request code: '+errorStatus)
-                .setDescription(`Kindly join the support server to inform the support about this thank you  `)
-                .setFields({ name: 'Support Server', value: conmmonVariable.supportLink, inline: true })
-            break;
+        // default:
+        //     errorEmbed.data
+        //         .setTitle('Unknown error happened when handling the Clash of clan request code: '+errorStatus)
+        //         .setDescription(`Kindly join the support server to inform the support about this thank you  `)
+        //         .setFields({ name: 'Support Server', value: conmmonVariable.supportLink, inline: true })
+        //     break;
     }
 
     return errorEmbed.data;

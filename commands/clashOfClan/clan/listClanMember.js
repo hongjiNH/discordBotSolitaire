@@ -16,18 +16,54 @@ module.exports = {
 
         const clanTag = interaction.options.getString('clantag');
 
-        try {
-            const clan = await cocClient.cocClientLogin.getClanMembers(clanTag);
+        // try {
+            const clan = await cocClient.cocClientLogin.getClanMembers(clanTag,4);
+            defaultEmbed.data.setTitle('List of member in: ').setFields();
 
-            console.log(clan);
-            return interaction.reply({ embeds: [defaultEmbed.data], files: [file] });
+            let totalMember=0;
+            console.log(clan.length);
 
-        }
-        catch (error) {
+            for(let i=0;i<clan.length;i++){
+                console.log(clan[i].league.name);
+                totalMember++;
+                console.log(defaultEmbed.data.data.fields.length)
+                if(defaultEmbed.data.data.fields.length===24){
+                    console.log(defaultEmbed.data);
+                    // if(interaction.){
+                    //     defaultEmbed.data.setDescription("The other "+totalMember+' member ')
+                    //     interaction.followUp({ embeds: [defaultEmbed.data], files: [file] });
 
-            return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [file] });
+                    // }
+                    // else{
+                        defaultEmbed.data.setDescription("The first "+totalMember+' member ')
+                        interaction.reply({ embeds: [defaultEmbed.data], files: [file] });
 
-        }
+                    // }
+                    defaultEmbed.data.setFields();
+                }
+                else{
+                    defaultEmbed.data.addFields(
+                  
+                        {name:'Name/Role',value:`${clan[i].name}/${clan[i].role}`,inline: true },
+                        {name:'Exp Level',value:  `${clan[i].expLevel}`,inline: true },
+                        {name:'Trophies/League',value:  `${clan[i].trophies}/${clan[i].league.name} `,inline: true },
+                        {name:'Troop Donation/receive',value:  `${clan[i].donations}/${clan[i].received}`,inline: true }
+                        )
+                }
+              
+            }
+
+           // defaultEmbed.data.setDescription("Total of "+totalMember+' member found')
+
+           // console.log(clan);
+            //return interaction.reply({ embeds: [defaultEmbed.data], files: [file] });
+
+        // }
+        // catch (error) {
+
+        //     return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [file] });
+
+        // }
 
     },
 };
