@@ -41,7 +41,6 @@ module.exports = {
                 );
 
             for (let i = 0; i < clan.clanCapital.districts.length; i++) {
-                console.log(clan.clanCapital.districts[i].name);
                 defaultEmbed.data.addFields(
                     { name:`${clan.clanCapital.districts[i].name}`, value: `${clan.clanCapital.districts[i].districtHallLevel}`, inline: true },
                 );

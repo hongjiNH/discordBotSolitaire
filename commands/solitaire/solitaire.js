@@ -99,7 +99,7 @@ module.exports = {
                     break;
             }
 
-            
+
             const addButton = new ButtonBuilder()
                 .setCustomId('addUser_' + conmmonVariable.solitaire)
                 .setLabel('add me in')
@@ -110,8 +110,14 @@ module.exports = {
                 .setLabel('remove')
                 .setStyle(ButtonStyle.Danger);
 
+
+            const closeButton = new ButtonBuilder()
+                .setCustomId('closerForm_' + conmmonVariable.solitaire)
+                .setLabel('close')
+                .setStyle(ButtonStyle.Danger);
+
             const row = new ActionRowBuilder()
-                .addComponents(addButton, removeButton);
+                .addComponents(addButton, removeButton, closeButton);
 
             defaultEmbed.data.setDescription(question + "?");
 
@@ -136,37 +142,41 @@ module.exports = {
                 interaction.editReply({ embeds: [defaultEmbed.data] });
 
                 if (countdown <= 0) {
-
-                    clearInterval(countdownInterval);
-
-                    addButton.setDisabled(true);
-                    removeButton.setDisabled(true);
-
-                    defaultEmbed.data.setTitle(title + " is close  ").setFields();
-
-                    if (list.length !== 0) {
-                        for (let i = 0; i < list.length; i++) {
-                            defaultEmbed.data.addFields(
-                                { name: i + 1 + ") " + list[i], value: "\u200B", inline: true },
-                            );
-                        }
-                    }
-                    else {
-                        defaultEmbed.data.setFields(
-                            { name: 'No one yet', value: "\u200B", inline: true },
-                        );
-                    }
-
-                    interaction.editReply({ embeds: [defaultEmbed.data], components: [row] });
-
-                    if (directmessage === true) {
-                        client.users.fetch(interaction.user.id, false).then((user) => {
-                            user.send({ embeds: [defaultEmbed.data] });
-                        })
-                    }
+                    endFormFunction();
 
                 }
             }, interval)
+
+            const endFormFunction = () => {
+
+                clearInterval(countdownInterval);
+                addButton.setDisabled(true);
+                removeButton.setDisabled(true);
+                closeButton.setDisabled(true);
+
+                defaultEmbed.data.setTitle(title + " is close  ").setFields();
+
+                if (list.length !== 0) {
+                    for (let i = 0; i < list.length; i++) {
+                        defaultEmbed.data.addFields(
+                            { name: i + 1 + ") " + list[i], value: "\u200B", inline: true },
+                        );
+                    }
+                }
+                else {
+                    defaultEmbed.data.setFields(
+                        { name: 'No one yet', value: "\u200B", inline: true },
+                    );
+                }
+
+                interaction.editReply({ embeds: [defaultEmbed.data], components: [row] });
+
+                if (directmessage === true) {
+                    client.users.fetch(interaction.user.id, false).then((user) => {
+                        user.send({ embeds: [defaultEmbed.data] });
+                    })
+                }
+            }
 
             while (countdown >= 0) {
 
@@ -184,30 +194,40 @@ module.exports = {
                         list.map(name => name === confirmation.user.username ? '' : temList.push(name));
                         list = [];
                         temList.map(name => list.push(name));
-                        temList=[];
+                        temList = [];
                     }
                 }
+                else if (confirmation.customId === 'closerForm_' + conmmonVariable.solitaire) {
 
-                defaultEmbed.data
-                    .setTitle(`${title}, Countdown: ${formatTime(countdown)} remaining.`)
-                    .setDescription(question + ' ?')
-                    .setFields();
+                    countdown = 0;
+                    endFormFunction();
+                }
 
-                if (list.length !== 0) {
-                    for (let i = 0; i < list.length; i++) {
-                        defaultEmbed.data.addFields(
-                            { name: i + 1 + ")  " + list[i], value: "\u200B", inline: true },
+                if (confirmation.customId !== 'closerForm_' + conmmonVariable.solitaire) {
+                    defaultEmbed.data
+                        .setTitle(`${title}, Countdown: ${formatTime(countdown)} remaining.`)
+                        .setDescription(question + ' ?')
+                        .setFields();
+
+                    if (list.length !== 0) {
+                        for (let i = 0; i < list.length; i++) {
+                            defaultEmbed.data.addFields(
+                                { name: i + 1 + ")  " + list[i], value: "\u200B", inline: true },
+                            );
+                        }
+                    }
+
+                    else {
+                        defaultEmbed.data.setFields(
+                            { name: 'No one yet', value: "\u200B", inline: true },
                         );
                     }
-                }
 
-                else {
-                    defaultEmbed.data.setFields(
-                        { name: 'No one yet', value: "\u200B", inline: true },
-                    );
                 }
 
                 await confirmation.update({ embeds: [defaultEmbed.data], files: [file], components: [row] });
+
+
             }
         }
     },
