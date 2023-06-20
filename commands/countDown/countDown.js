@@ -1,3 +1,4 @@
+const calculateTime = require('../../share/calculateTime');
 const defaultEmbed = require('../../share/embed/defaultEmbed');
 const file = require('../../share/file')
 const formatTime = require('../../share/formatTime');
@@ -5,7 +6,7 @@ const conmmonVariable = require('../../share/index');
 
 const interval = 60000;
 
-const { SlashCommandBuilder,userMention  } = require("discord.js");
+const { SlashCommandBuilder, userMention } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -23,17 +24,25 @@ module.exports = {
                     .setDescription('Custom message after timer')
                     .setMaxLength(100)
                     .setRequired(true))
-                .addIntegerOption(option => option.setName('days')
-                    .setDescription('How many day(s)')
-                    .setRequired(true)
-                    .setMinValue(1)
-                    .setMaxValue(30))
                 .addBooleanOption(option => option.setName('public')
                     .setDescription("Set to false if you dont want others to see this")
                     .setRequired(true))
                 .addBooleanOption(option => option.setName('directmessage')
                     .setDescription("Set to false if you dont want to be direct messaged at completion")
-                    .setRequired(true)))
+                    .setRequired(true))
+                .addIntegerOption(option => option.setName('days')
+                    .setDescription('How many day(s)')
+                    .setRequired(true)
+                    .setMinValue(1)
+                    .setMaxValue(30))
+                .addIntegerOption(option => option.setName('hours')
+                    .setDescription('How many hour(s)')
+                    .setMinValue(1)
+                    .setMaxValue(24))
+                .addIntegerOption(option => option.setName('minutes')
+                    .setDescription('How many mintue(s)')
+                    .setMinValue(1)
+                    .setMaxValue(60)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('hour')
@@ -46,17 +55,21 @@ module.exports = {
                     .setDescription('Custom message after timer')
                     .setMaxLength(100)
                     .setRequired(true))
-                .addIntegerOption(option => option.setName('hours')
-                    .setDescription('How many hour(s)')
-                    .setRequired(true)
-                    .setMinValue(1)
-                    .setMaxValue(24))
                 .addBooleanOption(option => option.setName('public')
                     .setDescription("Set to false if you dont want others to see this")
                     .setRequired(true))
                 .addBooleanOption(option => option.setName('directmessage')
                     .setDescription("Set to false if you dont want to be direct messaged at completion")
-                    .setRequired(true)))
+                    .setRequired(true))
+                .addIntegerOption(option => option.setName('hours')
+                    .setDescription('How many hour(s)')
+                    .setRequired(true)
+                    .setMinValue(1)
+                    .setMaxValue(24))
+                .addIntegerOption(option => option.setName('minutes')
+                    .setDescription('How many mintue(s)')
+                    .setMinValue(1)
+                    .setMaxValue(60)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('minute')
@@ -69,17 +82,17 @@ module.exports = {
                     .setDescription('Custom message after timer')
                     .setMaxLength(100)
                     .setRequired(true))
-                .addIntegerOption(option => option.setName('minutes')
-                    .setDescription('How many mintue(s)')
-                    .setRequired(true)
-                    .setMinValue(1)
-                    .setMaxValue(60))
                 .addBooleanOption(option => option.setName('public')
                     .setDescription("Set to false if you dont want others to see this")
                     .setRequired(true))
                 .addBooleanOption(option => option.setName('directmessage')
                     .setDescription("Set to false if you dont want to be direct messaged at completion")
-                    .setRequired(true)))
+                    .setRequired(true))
+                .addIntegerOption(option => option.setName('minutes')
+                    .setDescription('How many mintue(s)')
+                    .setRequired(true)
+                    .setMinValue(1)
+                    .setMaxValue(60)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('week')
@@ -92,17 +105,30 @@ module.exports = {
                     .setDescription('Custom message after timer')
                     .setMaxLength(100)
                     .setRequired(true))
-                .addIntegerOption(option => option.setName('weeks')
-                    .setDescription('How many week(s)')
-                    .setRequired(true)
-                    .setMinValue(1)
-                    .setMaxValue(60))
                 .addBooleanOption(option => option.setName('public')
                     .setDescription("Set to false if you dont want others to see this")
                     .setRequired(true))
                 .addBooleanOption(option => option.setName('directmessage')
                     .setDescription("Set to false if you dont want to be direct messaged at completion")
-                    .setRequired(true))),
+                    .setRequired(true))
+                .addIntegerOption(option => option.setName('weeks')
+                    .setDescription('How many week(s)')
+                    .setRequired(true)
+                    .setMinValue(1)
+                    .setMaxValue(60))
+                .addIntegerOption(option => option.setName('days')
+                    .setDescription('How many day(s)')
+                    .setMinValue(1)
+                    .setMaxValue(30))
+                .addIntegerOption(option => option.setName('hours')
+                    .setDescription('How many hour(s)')
+                    .setMinValue(1)
+                    .setMaxValue(24))
+                .addIntegerOption(option => option.setName('minutes')
+                    .setDescription('How many mintue(s)')
+                    .setMinValue(1)
+                    .setMaxValue(60))
+        ),
 
     async execute(interaction, client) {
 
@@ -111,7 +137,7 @@ module.exports = {
         const public = interaction.options.getBoolean('public');
         const directmessage = interaction.options.getBoolean('directmessage');
 
-        let timeInMilliseconds = 0;
+        let timeInMilliseconds = calculateTime(interaction.options?.getInteger('weeks'), interaction.options?.getInteger('days'), interaction.options?.getInteger('hours'), interaction.options.getInteger('minutes'));
 
         defaultEmbed.data
             .setDescription('\u200b')
@@ -119,20 +145,21 @@ module.exports = {
 
         switch (interaction.options._subcommand) {
             case 'day':
-                defaultEmbed.data.setTitle("Your count down timer is set to: " + interaction.options.getInteger('days') + ' day(s)');
-                timeInMilliseconds += interaction.options.getInteger('days') * 24 * 60 * 60 * 1000;
+                timeInMilliseconds =
+                    defaultEmbed.data.setTitle("Your count down timer is set to: " + formatTime(calculateTime(interaction.options?.getInteger('weeks'), interaction.options?.getInteger('days'), interaction.options?.getInteger('hours'), interaction.options.getInteger('minutes'))));
+                // timeInMilliseconds += interaction.options.getInteger('days') * 24 * 60 * 60 * 1000;
                 break;
             case 'hour':
-                defaultEmbed.data.setTitle("Your count down timer is set to: " + interaction.options.getInteger('hours') + ' hour(s)');
-                timeInMilliseconds += interaction.options.getInteger('hours') * 60 * 60 * 1000;
+                defaultEmbed.data.setTitle("Your count down timer is set to: " + formatTime(calculateTime(interaction.options?.getInteger('weeks'), interaction.options?.getInteger('days'), interaction.options?.getInteger('hours'), interaction.options.getInteger('minutes'))));
+                // timeInMilliseconds += interaction.options.getInteger('hours') * 60 * 60 * 1000;
                 break;
             case 'minute':
-                defaultEmbed.data.setTitle("Your count down timer is set to: " + interaction.options.getInteger('minutes') + ' minute(s)');
-                timeInMilliseconds += interaction.options.getInteger('minutes') * 60 * 1000;
+                defaultEmbed.data.setTitle("Your count down timer is set to: " + formatTime(calculateTime(interaction.options?.getInteger('weeks'), interaction.options?.getInteger('days'), interaction.options?.getInteger('hours'), interaction.options.getInteger('minutes'))));
+                // timeInMilliseconds += interaction.options.getInteger('minutes') * 60 * 1000;
                 break;
             case 'week':
-                defaultEmbed.data.setTitle("Your count down timer is set to: " + interaction.options.getInteger('weeks') + ' week(s)');
-                timeInMilliseconds += interaction.options.getInteger('weeks') * 7 * 24 * 60 * 60 * 1000;
+                defaultEmbed.data.setTitle("Your count down timer is set to: " + formatTime(calculateTime(interaction.options?.getInteger('weeks'), interaction.options?.getInteger('days'), interaction.options?.getInteger('hours'), interaction.options.getInteger('minutes'))));
+                //timeInMilliseconds += interaction.options.getInteger('weeks') * 7 * 24 * 60 * 60 * 1000;
                 break;
         }
 

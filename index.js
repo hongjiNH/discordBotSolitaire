@@ -4,13 +4,12 @@ const path = require('node:path');
 const errorEmbed = require("./share/embed/errorEmbed");
 const file = require('./share/file');
 const changeStatus = require('./botActivity/botActivity')
+const conmmonVariable = require('./share/index');
+const autoUpdate = require('./deploy-commands')
 
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
 
 const token = process.env.token;
-
-const conmmonVariable = require('./share/index');
-const autoUpdate = require('./deploy-commands')
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -67,7 +66,7 @@ client.once(Events.ClientReady, c => {
 
 	const Guilds = client.guilds.cache.map(guild => guild.id);
 
-	autoUpdate(Guilds);
+	autoUpdate(Guilds,client);
 
 	changeStatus(client, Guilds);
 

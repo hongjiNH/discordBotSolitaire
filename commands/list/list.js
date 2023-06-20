@@ -10,11 +10,11 @@ const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, userM
 module.exports = {
     data: new SlashCommandBuilder()
         .setName(conmmonVariable.solitaire)
-        .setDescription("Ask a question and allowing user to click to add their username in " + conmmonVariable.botName)
+        .setDescription("Ask a question and allowing user to click to add their username in ")
         .addSubcommand(subcommand =>
             subcommand
                 .setName('day')
-                .setDescription('How many day/s before this application is close')
+                .setDescription('How many day(s) before this application is close')
                 .addStringOption(option => option.setName('title')
                     .setDescription('Title of this question')
                     .setMaxLength(100)
@@ -24,7 +24,7 @@ module.exports = {
                     .setMaxLength(100)
                     .setRequired(true))
                 .addIntegerOption(option => option.setName('days')
-                    .setDescription('How many day/s')
+                    .setDescription('How many day(s)')
                     .setRequired(true)
                     .setMinValue(1)
                     .setMaxValue(30))
@@ -34,7 +34,7 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('hour')
-                .setDescription('How many hour/s before this application is close')
+                .setDescription('How many hour(s) before this application is close')
                 .addStringOption(option => option.setName('title')
                     .setDescription('Title of this question')
                     .setMaxLength(100)
@@ -44,7 +44,7 @@ module.exports = {
                     .setMaxLength(100)
                     .setRequired(true))
                 .addIntegerOption(option => option.setName('hours')
-                    .setDescription('How many hour/s')
+                    .setDescription('How many hour(s)')
                     .setRequired(true)
                     .setMinValue(1)
                     .setMaxValue(24))

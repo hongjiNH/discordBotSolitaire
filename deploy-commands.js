@@ -16,7 +16,7 @@ const commandFolders = fs.readdirSync(foldersPath);
 const clashOfClanPath = path.join(__dirname, 'commands/clashOfClan');
 const clashOfClanCommandFolders = fs.readdirSync(clashOfClanPath);
 
-module.exports = (guildId) => {
+module.exports = (guildId, client) => {
 	for (const folder of commandFolders) {
 		// Grab all the command files from the commands directory you created earlier
 		const commandsPath = path.join(foldersPath, folder);
@@ -55,9 +55,18 @@ module.exports = (guildId) => {
 	// and deploy your commands!
 	(async () => {
 		try {
-			let totalServer=0;
+			let totalServer = 0;
 			for (let i = 0; i < guildId.length; i++) {
 				totalServer++;
+
+				// const commands1 = await client.guilds.cache.get(guildId[i]).commands.fetch();
+				// // console.log(commands1);
+				// // if(commands1.name==='list')console.log(commands1);
+				// // // Delete all the existing guild commands
+				// await Promise.all(commands1.map(command => command.delete()));
+
+				// console.log( await client.guilds.cache.get(guildId[i]).commands.fetch());
+
 				console.log(`Started refreshing ${commands.length} application (/) commands ${guildId[i]}.`);
 
 				// The put method is used to fully refresh all commands in the guild with the current set
