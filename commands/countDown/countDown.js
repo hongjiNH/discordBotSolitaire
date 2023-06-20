@@ -114,6 +114,7 @@ module.exports = {
         let timeInMilliseconds = 0;
 
         defaultEmbed.data
+            .setDescription('\u200b')
             .setFields({ name: "Your message", value: messagestart })
 
         switch (interaction.options._subcommand) {
