@@ -5,7 +5,7 @@ const formatTime = require('../../share/formatTime');
 
 const interval = 60000;
 
-const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, userMention } = require("discord.js");
+const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const calculateTime = require('../../share/calculateTime');
 
 module.exports = {
@@ -39,7 +39,9 @@ module.exports = {
                 .addIntegerOption(option => option.setName('minutes')
                     .setDescription('How many mintue(s)')
                     .setMinValue(1)
-                    .setMaxValue(60)))
+                    .setMaxValue(60))
+                .addRoleOption(option => option.setName('role')
+                    .setDescription("Mention a role ")))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('hour')
@@ -63,7 +65,9 @@ module.exports = {
                 .addIntegerOption(option => option.setName('minutes')
                     .setDescription('How many mintue(s)')
                     .setMinValue(1)
-                    .setMaxValue(60)))
+                    .setMaxValue(60))
+                .addRoleOption(option => option.setName('role')
+                    .setDescription("Mention a role ")))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('minute')
@@ -83,7 +87,9 @@ module.exports = {
                     .setDescription('How many mintue(s)')
                     .setRequired(true)
                     .setMinValue(1)
-                    .setMaxValue(60))),
+                    .setMaxValue(60))
+                .addRoleOption(option => option.setName('role')
+                    .setDescription("Mention a role "))),
 
     async execute(interaction, client) {
         {
@@ -91,9 +97,12 @@ module.exports = {
             const title = interaction.options.getString('title');
             const question = interaction.options.getString('question');
             const directmessage = interaction.options.getBoolean('directmessage');
+            const role = interaction.options.getRole('role').name;
 
             let list = [];
             let temList = [];
+
+
 
             let timeInMilliseconds = calculateTime(null, interaction.options?.getInteger('days'), interaction.options?.getInteger('hours'), interaction.options.getInteger('minutes'));
 
@@ -128,7 +137,13 @@ module.exports = {
             const row = new ActionRowBuilder()
                 .addComponents(addButton, removeButton, closeButton);
 
-            defaultEmbed.data.setDescription(question + "?");
+            if (role !== null || role !== undefined) {
+                defaultEmbed.data.setDescription(question + "?" +role + ' Check out this list');
+            }
+            else{
+                defaultEmbed.data.setDescription(question + "?" );
+            }
+          
 
             defaultEmbed.data.setFields(
                 { name: 'No one yet', value: "\u200B", inline: true },
@@ -164,6 +179,8 @@ module.exports = {
                 closeButton.setDisabled(true);
 
                 defaultEmbed.data.setTitle(title + " is close  ").setFields();
+
+
 
                 if (list.length !== 0) {
                     for (let i = 0; i < list.length; i++) {
