@@ -6,6 +6,7 @@ const formatTime = require('../../share/formatTime');
 const interval = 60000;
 
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, userMention } = require("discord.js");
+const calculateTime = require('../../share/calculateTime');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -23,14 +24,22 @@ module.exports = {
                     .setDescription('The question of this')
                     .setMaxLength(100)
                     .setRequired(true))
+                .addBooleanOption(option => option.setName('directmessage')
+                    .setDescription("Set to false if you dont want to be direct messaged at completion")
+                    .setRequired(true))
                 .addIntegerOption(option => option.setName('days')
                     .setDescription('How many day(s)')
                     .setRequired(true)
                     .setMinValue(1)
                     .setMaxValue(30))
-                .addBooleanOption(option => option.setName('directmessage')
-                    .setDescription("Set to false if you dont want to be direct messaged at completion")
-                    .setRequired(true)))
+                .addIntegerOption(option => option.setName('hours')
+                    .setDescription('How many hour(s)')
+                    .setMinValue(1)
+                    .setMaxValue(24))
+                .addIntegerOption(option => option.setName('minutes')
+                    .setDescription('How many mintue(s)')
+                    .setMinValue(1)
+                    .setMaxValue(60)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('hour')
@@ -43,14 +52,18 @@ module.exports = {
                     .setDescription('The question of this')
                     .setMaxLength(100)
                     .setRequired(true))
+                .addBooleanOption(option => option.setName('directmessage')
+                    .setDescription("Set to false if you dont want to be direct messaged at completion")
+                    .setRequired(true))
                 .addIntegerOption(option => option.setName('hours')
                     .setDescription('How many hour(s)')
                     .setRequired(true)
                     .setMinValue(1)
                     .setMaxValue(24))
-                .addBooleanOption(option => option.setName('directmessage')
-                    .setDescription("Set to false if you dont want to be direct messaged at completion")
-                    .setRequired(true)))
+                .addIntegerOption(option => option.setName('minutes')
+                    .setDescription('How many mintue(s)')
+                    .setMinValue(1)
+                    .setMaxValue(60)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('minute')
@@ -63,14 +76,14 @@ module.exports = {
                     .setDescription('The question of this')
                     .setMaxLength(100)
                     .setRequired(true))
+                .addBooleanOption(option => option.setName('directmessage')
+                    .setDescription("Set to false if you dont want to be direct messaged at completion")
+                    .setRequired(true))
                 .addIntegerOption(option => option.setName('minutes')
                     .setDescription('How many mintue(s)')
                     .setRequired(true)
                     .setMinValue(1)
-                    .setMaxValue(60))
-                .addBooleanOption(option => option.setName('directmessage')
-                    .setDescription("Set to false if you dont want to be direct messaged at completion")
-                    .setRequired(true))),
+                    .setMaxValue(60))),
 
     async execute(interaction, client) {
         {
@@ -82,24 +95,20 @@ module.exports = {
             let list = [];
             let temList = [];
 
-            let timeInMilliseconds = 0;
+            let timeInMilliseconds = calculateTime(null, interaction.options?.getInteger('days'), interaction.options?.getInteger('hours'), interaction.options.getInteger('minutes'));
 
             switch (interaction.options._subcommand) {
                 case 'day':
-                    defaultEmbed.data.setTitle(title + "  will close in " + interaction.options.getInteger('days') + ' day(s)');
-                    timeInMilliseconds += interaction.options.getInteger('days') * 24 * 60 * 60 * 1000;
+                    defaultEmbed.data.setTitle(title + "  will close in " + formatTime(timeInMilliseconds));
+
                     break;
                 case 'hour':
-                    defaultEmbed.data.setTitle(title + "  will close in " + interaction.options.getInteger('hours') + ' hour(s)');
-                    timeInMilliseconds += interaction.options.getInteger('hours') * 60 * 60 * 1000;
+                    defaultEmbed.data.setTitle(title + "  will close in " + formatTime(timeInMilliseconds));
                     break;
                 case 'minute':
-                    defaultEmbed.data.setTitle(title + "  will close in " + interaction.options.getInteger('minutes') + ' minute(s)');
-                    timeInMilliseconds += interaction.options.getInteger('minutes') * 60 * 1000;
+                    defaultEmbed.data.setTitle(title + "  will close in " + formatTime(timeInMilliseconds));
                     break;
             }
-
-
             const addButton = new ButtonBuilder()
                 .setCustomId('addUser_' + conmmonVariable.solitaire)
                 .setLabel('add me in')

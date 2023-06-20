@@ -6,7 +6,7 @@ const conmmonVariable = require('../../share/index');
 
 const interval = 60000;
 
-const { SlashCommandBuilder, userMention } = require("discord.js");
+const { SlashCommandBuilder, userMention, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -139,38 +139,78 @@ module.exports = {
 
         let timeInMilliseconds = calculateTime(interaction.options?.getInteger('weeks'), interaction.options?.getInteger('days'), interaction.options?.getInteger('hours'), interaction.options.getInteger('minutes'));
 
+        let response='';
+
         defaultEmbed.data
             .setDescription('\u200b')
             .setFields({ name: "Your message", value: messagestart })
 
+
+        const closeButton = new ButtonBuilder()
+            .setCustomId('closerForm_' + conmmonVariable.solitaire)
+            .setLabel('close')
+            .setStyle(ButtonStyle.Danger);
+
+        const row = new ActionRowBuilder()
+            .addComponents(closeButton);
+
         switch (interaction.options._subcommand) {
             case 'day':
                 timeInMilliseconds =
-                    defaultEmbed.data.setTitle("Your count down timer is set to: " + formatTime(calculateTime(interaction.options?.getInteger('weeks'), interaction.options?.getInteger('days'), interaction.options?.getInteger('hours'), interaction.options.getInteger('minutes'))));
-                // timeInMilliseconds += interaction.options.getInteger('days') * 24 * 60 * 60 * 1000;
+                    defaultEmbed.data.setTitle("Your count down timer is set to: " + formatTime(timeInMilliseconds));
                 break;
             case 'hour':
-                defaultEmbed.data.setTitle("Your count down timer is set to: " + formatTime(calculateTime(interaction.options?.getInteger('weeks'), interaction.options?.getInteger('days'), interaction.options?.getInteger('hours'), interaction.options.getInteger('minutes'))));
-                // timeInMilliseconds += interaction.options.getInteger('hours') * 60 * 60 * 1000;
+                defaultEmbed.data.setTitle("Your count down timer is set to: " + formatTime(timeInMilliseconds));
                 break;
             case 'minute':
-                defaultEmbed.data.setTitle("Your count down timer is set to: " + formatTime(calculateTime(interaction.options?.getInteger('weeks'), interaction.options?.getInteger('days'), interaction.options?.getInteger('hours'), interaction.options.getInteger('minutes'))));
-                // timeInMilliseconds += interaction.options.getInteger('minutes') * 60 * 1000;
+                defaultEmbed.data.setTitle("Your count down timer is set to: " + formatTime(timeInMilliseconds));
                 break;
             case 'week':
-                defaultEmbed.data.setTitle("Your count down timer is set to: " + formatTime(calculateTime(interaction.options?.getInteger('weeks'), interaction.options?.getInteger('days'), interaction.options?.getInteger('hours'), interaction.options.getInteger('minutes'))));
-                //timeInMilliseconds += interaction.options.getInteger('weeks') * 7 * 24 * 60 * 60 * 1000;
+                defaultEmbed.data.setTitle("Your count down timer is set to: " + formatTime(formatTime(timeInMilliseconds)));
                 break;
         }
 
         if (public === false) {
-            await interaction.reply({ embeds: [defaultEmbed.data], files: [file], ephemeral: true });
+           response= await interaction.reply({ embeds: [defaultEmbed.data], files: [file], components: [row], ephemeral: true });
         }
         else {
-            await interaction.reply({ embeds: [defaultEmbed.data], files: [file] });
+            response= await interaction.reply({ embeds: [defaultEmbed.data], files: [file], components: [row] });
         }
 
         let countdown = timeInMilliseconds;
+
+
+        const endFormFunction=()=>{
+            
+            closeButton.setDisabled(true);
+            clearInterval(countdownInterval);
+
+            defaultEmbed.data.setTitle('Count down timer has stop.').setFields({ name: 'Your message', value: messageend });
+
+            if (public === false) {
+
+                if (directmessage === true) {
+                    // user wanted to receive it in their dm
+                    client.users.fetch(interaction.user.id, false).then((user) => {
+                        user.send({ embeds: [defaultEmbed.data] });
+                    });
+                }
+                interaction.editReply({ embeds: [defaultEmbed.data], components: [row], ephemeral: true });
+            }
+            else {
+
+                //user wanted to receive it publicly in the channel
+                if (directmessage === true) {
+                    //user  wanted ot receive it in their dm
+                    client.users.fetch(interaction.user.id, false).then((user) => {
+                        user.send({ embeds: [defaultEmbed.data] });
+                    });
+                }
+
+                interaction.editReply({ embeds: [defaultEmbed.data], components: [row] });
+            }
+
+        }
 
         const countdownInterval = setInterval(() => {
 
@@ -185,45 +225,29 @@ module.exports = {
             interaction.editReply({ embeds: [defaultEmbed.data] });
 
             if (countdown <= 0) {
-                clearInterval(countdownInterval);
-
-                defaultEmbed.data.setTitle('Count down timer has stop.').setFields({ name: 'Your message', value: messageend });
-
-                if (public === false) {
-                    // user wanted to receive privately, in the channel
-                    if (directmessage === false) {
-                        interaction.editReply({ embeds: [defaultEmbed.data], ephemeral: true });
-                    }
-                    else {
-                        // user wanted to receive it in their dm
-                        client.users.fetch(interaction.user.id, false).then((user) => {
-                            user.send({ embeds: [defaultEmbed.data] });
-                        });
-
-                        interaction.editReply({ embeds: [defaultEmbed.data], ephemeral: true });
-                    }
-                }
-                else {
-                    //user wanted to receive it publicly in the channel
-                    if (directmessage === false) {
-                        interaction.editReply({ embeds: [defaultEmbed.data] });
-                    }
-                    else {
-                        //user  wanted ot receive it in their dm
-                        client.users.fetch(interaction.user.id, false).then((user) => {
-                            user.send({ embeds: [defaultEmbed.data] });
-                        });
-
-                        interaction.editReply({ embeds: [defaultEmbed.data] });
-                    }
-
-                    interaction.editReply({ embeds: [defaultEmbed.data] });
-                }
-
+                endFormFunction();
             }
 
 
         }, interval)
+
+        
+        while (countdown >= 0) {
+            const confirmation = await response.awaitMessageComponent();
+
+            if (confirmation.customId === 'closerForm_' + conmmonVariable.solitaire) {
+                countdown = 0;
+                endFormFunction();
+            }
+
+            await confirmation.update({ embeds: [defaultEmbed.data], files: [file], components: [row] });
+
+        }
+
+
+     
+
+
     },
 
 };
