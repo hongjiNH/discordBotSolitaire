@@ -93,7 +93,6 @@ module.exports = {
 
     async execute(interaction, client) {
         {
-
             const title = interaction.options.getString('title');
             const question = interaction.options.getString('question');
             const directmessage = interaction.options.getBoolean('directmessage');
@@ -101,8 +100,6 @@ module.exports = {
 
             let list = [];
             let temList = [];
-
-
 
             let timeInMilliseconds = calculateTime(null, interaction.options?.getInteger('days'), interaction.options?.getInteger('hours'), interaction.options.getInteger('minutes'));
 
@@ -128,7 +125,6 @@ module.exports = {
                 .setLabel('remove')
                 .setStyle(ButtonStyle.Danger);
 
-
             const closeButton = new ButtonBuilder()
                 .setCustomId('closerForm_' + conmmonVariable.solitaire)
                 .setLabel('close')
@@ -144,7 +140,6 @@ module.exports = {
                 defaultEmbed.data.setDescription(question + "?" );
             }
           
-
             defaultEmbed.data.setFields(
                 { name: 'No one yet', value: "\u200B", inline: true },
             );
@@ -179,8 +174,6 @@ module.exports = {
                 closeButton.setDisabled(true);
 
                 defaultEmbed.data.setTitle(title + " is close  ").setFields();
-
-
 
                 if (list.length !== 0) {
                     for (let i = 0; i < list.length; i++) {
@@ -252,7 +245,6 @@ module.exports = {
                 }
 
                 await confirmation.update({ embeds: [defaultEmbed.data], files: [file], components: [row] });
-
 
             }
         }
