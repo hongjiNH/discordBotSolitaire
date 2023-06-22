@@ -65,7 +65,7 @@ client.once(Events.ClientReady, c => {
 
 	const Guilds = client.guilds.cache.map(guild => guild.id);
 
-	autoUpdate(Guilds, client);
+	autoUpdate();
 
 	changeStatus(client, Guilds);
 
@@ -103,7 +103,6 @@ client.on(Events.InteractionCreate, async interaction => {
 
 		const row = new ActionRowBuilder()
 			.addComponents(urlButton);
-
 
 		if (interaction.replied || interaction.deferred) {
 			await interaction.followUp({ embeds: [errorEmbed], files: [file], ephemeral: true, components: [row] });

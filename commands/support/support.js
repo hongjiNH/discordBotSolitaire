@@ -25,7 +25,6 @@ module.exports = {
 		const row = new ActionRowBuilder()
 			.addComponents(urlButton);
 
-
 		return interaction.reply({ embeds: [errorEmbed], files: [file], components: [row] });
 	},
 };
