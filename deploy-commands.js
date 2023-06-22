@@ -16,7 +16,7 @@ const commandFolders = fs.readdirSync(foldersPath);
 const clashOfClanPath = path.join(__dirname, 'commands/clashOfClan');
 const clashOfClanCommandFolders = fs.readdirSync(clashOfClanPath);
 
-module.exports = () => {
+module.exports = (guildId,client) => {
 	for (const folder of commandFolders) {
 		// Grab all the command files from the commands directory you created earlier
 		const commandsPath = path.join(foldersPath, folder);
@@ -55,6 +55,18 @@ module.exports = () => {
 	// and deploy your commands!
 	(async () => {
 		try {
+
+			let totalServer = 0;
+			for (let i = 0; i < guildId.length; i++) {
+				totalServer++;
+
+				const commands1 = await client.guilds.cache.get(guildId[i]).commands.fetch();
+				if(commands1.length!==0){
+				 // Delete all the existing guild commands
+					await Promise.all(commands1.map(command => command.delete()));
+				}
+		
+			}
 			
 			console.log(`Started refreshing ${commands.length} application (/) commands globally.`);
 

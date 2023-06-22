@@ -65,7 +65,7 @@ client.once(Events.ClientReady, c => {
 
 	const Guilds = client.guilds.cache.map(guild => guild.id);
 
-	autoUpdate();
+	autoUpdate(Guilds,client);
 
 	changeStatus(client, Guilds);
 
