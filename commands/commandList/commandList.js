@@ -1,39 +1,39 @@
 const defaultEmbed =require('../../share/embed/defaultEmbed');
 const file=require('../../share/file');
-const conmmonVariable=require('../../share/index');
+const commonVariable=require('../../share/index');
 
 const { SlashCommandBuilder, codeBlock } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName(conmmonVariable.command)
-        .setDescription("List of command for bot: " + conmmonVariable.botName),
+        .setName(commonVariable.command)
+        .setDescription("List of command for bot: " + commonVariable.botName),
     async execute(interaction) {
 
         defaultEmbed.data
         .setTitle("Normal Command List")
         .setFields(
-            { name: 'Ping with the bot', value: codeBlock("/"+conmmonVariable.ping)},
-            { name: 'Support Server', value: codeBlock("/"+conmmonVariable.support)},
-            { name: 'The command-(obviously you know this else how you see this)', value: codeBlock("/"+conmmonVariable.command) },
-            { name: 'Version', value: codeBlock("/"+conmmonVariable.version)},
-            { name: 'List that allow user to add /remove themself', value: codeBlock("/"+conmmonVariable.solitaire) },
-            { name: 'Count Down timer', value: codeBlock("/"+conmmonVariable.countdown) },
-            { name: 'Get my community server link', value: codeBlock("/"+conmmonVariable.community) },
-            { name: 'Adding my bot to other server', value: codeBlock("/"+conmmonVariable.addbot) }
+            { name: 'Ping with the bot', value: codeBlock("/"+commonVariable.ping)},
+            { name: 'Support Server', value: codeBlock("/"+commonVariable.support)},
+            { name: 'The command-(obviously you know this else how you see this)', value: codeBlock("/"+commonVariable.command) },
+            { name: 'Version', value: codeBlock("/"+commonVariable.version)},
+            { name: 'List that allow user to add /remove themself', value: codeBlock("/"+commonVariable.solitaire) },
+            { name: 'Count Down timer', value: codeBlock("/"+commonVariable.countdown) },
+            { name: 'Get my community server link', value: codeBlock("/"+commonVariable.community) },
+            { name: 'Adding my bot to other server', value: codeBlock("/"+commonVariable.addbot) }
         )
-        .setDescription("The list of the normal command for bot: " +conmmonVariable.botName);
+        .setDescription("The list of the normal command for bot: " +commonVariable.botName);
         await interaction.reply({ embeds: [defaultEmbed.data], files: [file] });
 
         //COC
         defaultEmbed.data
         .setTitle("COC Command List")
         .setFields(
-            { name: 'Retrieve information about clan\'s current clan war ', value: codeBlock("/"+conmmonVariable.cocCurrentWar) },
-           // { name: 'List clan members', value: codeBlock("/"+conmmonVariable.cocListMember) },
-            { name: 'Get clan informaiton', value: codeBlock("/"+conmmonVariable.cocGetClanInfo) }
+            { name: 'Retrieve information about clan\'s current clan war ', value: codeBlock("/"+commonVariable.cocCurrentWar) },
+           // { name: 'List clan members', value: codeBlock("/"+commonVariable.cocListMember) },
+            { name: 'Get clan informaiton', value: codeBlock("/"+commonVariable.cocGetClanInfo) }
         )
-        .setDescription("The list of clash of clan command for bot: " +conmmonVariable.botName);
+        .setDescription("The list of clash of clan command for bot: " +commonVariable.botName);
         await interaction.followUp({ embeds: [defaultEmbed.data], files: [file] });
 
 

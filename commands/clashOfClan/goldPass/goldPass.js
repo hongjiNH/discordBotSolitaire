@@ -1,12 +1,12 @@
 const defaultEmbed = require('../../../share/embed/defaultEmbed');
 const file = require('../../../share/file')
-const conmmonVariable = require('../../../share/index');
+const commonVariable = require('../../../share/index');
 const cocClient = require('../../../share/coc/cocClientLogin');
 const { SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName(conmmonVariable.cocGoldPass)
+        .setName(commonVariable.cocGoldPass)
         .setDescription('Get information about the current gold pass season'),
 
     async execute(interaction) {

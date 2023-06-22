@@ -1,11 +1,11 @@
 const defaultEmbed = require('../../../share/embed/defaultEmbed');
 const file = require('../../../share/file')
-const conmmonVariable = require('../../../share/index');
+const commonVariable = require('../../../share/index');
 const cocClient = require('../../../share/coc/cocClientLogin');
 const { SlashCommandBuilder } = require("discord.js");
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName(conmmonVariable.cocGetClanInfo)
+        .setName(commonVariable.cocGetClanInfo)
         .setDescription('Get clan information ')
         .addStringOption(option => option.setName('clantag')
             .setDescription('Enter your clan tag etc #2PPP')

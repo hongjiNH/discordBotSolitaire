@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const errorEmbed = require('../embed/errorEmbed');
-const conmmonVariable=require('../index');
+const commonVariable=require('../index');
 const { Client } = require('clashofclans.js');
 
 const coctoken = process.env.cocToken;
@@ -24,7 +24,7 @@ module.exports.cocClientError = (errorStatus) => {
             errorEmbed.data
                 .setTitle('Access denined due to clash of clan api issue')
                 .setDescription(`Kindly join the support server to inform the support about this thank you  `)
-                .setFields({ name: 'Support Server', value: conmmonVariable.supportLink, inline: true })
+                .setFields({ name: 'Support Server', value: commonVariable.supportLink, inline: true })
             break;
         case 404:
             errorEmbed.data
@@ -42,7 +42,7 @@ module.exports.cocClientError = (errorStatus) => {
             errorEmbed.data
                 .setTitle('Unknown error happened when handling the Clash of clan request ')
                 .setDescription(`Kindly join the support server to inform the support about this thank you  `)
-                .setFields({ name: 'Support Server', value: conmmonVariable.supportLink, inline: true })
+                .setFields({ name: 'Support Server', value: commonVariable.supportLink, inline: true })
             break;
         case 503:
             errorEmbed.data
@@ -54,7 +54,7 @@ module.exports.cocClientError = (errorStatus) => {
         //     errorEmbed.data
         //         .setTitle('Unknown error happened when handling the Clash of clan request code: '+errorStatus)
         //         .setDescription(`Kindly join the support server to inform the support about this thank you  `)
-        //         .setFields({ name: 'Support Server', value: conmmonVariable.supportLink, inline: true })
+        //         .setFields({ name: 'Support Server', value: commonVariable.supportLink, inline: true })
         //     break;
     }
 

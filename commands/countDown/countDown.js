@@ -2,15 +2,13 @@ const calculateTime = require('../../share/calculateTime');
 const defaultEmbed = require('../../share/embed/defaultEmbed');
 const file = require('../../share/file')
 const formatTime = require('../../share/formatTime');
-const conmmonVariable = require('../../share/index');
-
-const interval = 60000;
+const commonVariable = require('../../share/index');
 
 const { SlashCommandBuilder, userMention, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName(conmmonVariable.countdown)
+        .setName(commonVariable.countdown)
         .setDescription('Countdown to what you tells it to.')
         .addSubcommand(subcommand =>
             subcommand
@@ -147,7 +145,7 @@ module.exports = {
 
 
         const closeButton = new ButtonBuilder()
-            .setCustomId('closerForm_' + conmmonVariable.solitaire)
+            .setCustomId('closerForm_' + commonVariable.solitaire)
             .setLabel('close')
             .setStyle(ButtonStyle.Danger);
 
@@ -214,7 +212,7 @@ module.exports = {
 
         const countdownInterval = setInterval(() => {
 
-            countdown -= interval;
+            countdown -=  commonVariable.interval;
 
             const remainingTime = formatTime(countdown);
 
@@ -229,13 +227,13 @@ module.exports = {
             }
 
 
-        }, interval)
+        },  commonVariable.interval)
 
         
         while (countdown >= 0) {
             const confirmation = await response.awaitMessageComponent();
 
-            if (confirmation.customId === 'closerForm_' + conmmonVariable.solitaire) {
+            if (confirmation.customId === 'closerForm_' + commonVariable.solitaire) {
                 countdown = 0;
                 endFormFunction();
             }
@@ -243,11 +241,6 @@ module.exports = {
             await confirmation.update({ embeds: [defaultEmbed.data], files: [file], components: [row] });
 
         }
-
-
-     
-
-
     },
 
 };

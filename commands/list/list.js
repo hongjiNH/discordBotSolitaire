@@ -1,16 +1,14 @@
 const defaultEmbed = require('../../share/embed/defaultEmbed');
 const file = require('../../share/file');
-const conmmonVariable = require('../../share/index');
+const commonVariable = require('../../share/index');
 const formatTime = require('../../share/formatTime');
-
-const interval = 60000;
 
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const calculateTime = require('../../share/calculateTime');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName(conmmonVariable.solitaire)
+        .setName(commonVariable.solitaire)
         .setDescription("Ask a question and allowing user to click to add their username in ")
         .addSubcommand(subcommand =>
             subcommand
@@ -116,17 +114,17 @@ module.exports = {
                     break;
             }
             const addButton = new ButtonBuilder()
-                .setCustomId('addUser_' + conmmonVariable.solitaire)
+                .setCustomId('addUser_' + commonVariable.solitaire)
                 .setLabel('add me in')
                 .setStyle(ButtonStyle.Primary);
 
             const removeButton = new ButtonBuilder()
-                .setCustomId('removeUser_' + conmmonVariable.solitaire)
+                .setCustomId('removeUser_' + commonVariable.solitaire)
                 .setLabel('remove')
                 .setStyle(ButtonStyle.Danger);
 
             const closeButton = new ButtonBuilder()
-                .setCustomId('closerForm_' + conmmonVariable.solitaire)
+                .setCustomId('closerForm_' + commonVariable.solitaire)
                 .setLabel('close')
                 .setStyle(ButtonStyle.Danger);
 
@@ -164,7 +162,7 @@ module.exports = {
                     endFormFunction();
 
                 }
-            }, interval)
+            },  commonVariable.interval)
 
             const endFormFunction = () => {
 
@@ -201,12 +199,12 @@ module.exports = {
 
                 const confirmation = await response.awaitMessageComponent();
 
-                if (confirmation.customId === 'addUser_' + conmmonVariable.solitaire) {
+                if (confirmation.customId === 'addUser_' + commonVariable.solitaire) {
                     if (list.indexOf(confirmation.user.username) === -1) {
                         list.push(confirmation.user.username);
                     }
                 }
-                else if (confirmation.customId === 'removeUser_' + conmmonVariable.solitaire) {
+                else if (confirmation.customId === 'removeUser_' + commonVariable.solitaire) {
 
                     if (list.indexOf(confirmation.user.username) !== -1) {
 
@@ -216,13 +214,13 @@ module.exports = {
                         temList = [];
                     }
                 }
-                else if (confirmation.customId === 'closerForm_' + conmmonVariable.solitaire) {
+                else if (confirmation.customId === 'closerForm_' + commonVariable.solitaire) {
 
                     countdown = 0;
                     endFormFunction();
                 }
 
-                if (confirmation.customId !== 'closerForm_' + conmmonVariable.solitaire) {
+                if (confirmation.customId !== 'closerForm_' + commonVariable.solitaire) {
                     defaultEmbed.data
                         .setTitle(`${title}, Countdown: ${formatTime(countdown)} remaining.`)
                         .setDescription(question + ' ?')

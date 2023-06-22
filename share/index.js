@@ -5,7 +5,7 @@ module.exports.version ="Version 0.0.1"
 module.exports.botName ="Test01"
 module.exports.logo =`pic1.png`
 module.exports.donation ="https://streamlabs.com/nothealthyofficial/tip"
-module.exports.interval=6000;
+module.exports.interval=60000;
 module.exports.communityLink="https://discord.gg/KYqnX3VTP9";
 module.exports.addBotUrl='https://discord.com/api/oauth2/authorize?client_id=1118062954978492486&permissions=8&scope=bot'
 
