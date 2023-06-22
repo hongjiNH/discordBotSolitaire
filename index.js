@@ -1,13 +1,12 @@
 require('dotenv').config();
 const fs = require('node:fs');
 const path = require('node:path');
-const errorEmbed = require("./share/embed/errorEmbed");
 const file = require('./share/file');
 const changeStatus = require('./botActivity/botActivity')
 const commonVariable = require('./share/index');
 const autoUpdate = require('./deploy-commands')
 
-const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
+const { Client, Collection, Events, GatewayIntentBits,EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 const token = process.env.token;
 
@@ -66,7 +65,7 @@ client.once(Events.ClientReady, c => {
 
 	const Guilds = client.guilds.cache.map(guild => guild.id);
 
-	autoUpdate(Guilds,client);
+	autoUpdate(Guilds, client);
 
 	changeStatus(client, Guilds);
 
@@ -89,15 +88,27 @@ client.on(Events.InteractionCreate, async interaction => {
 
 		console.error(error);
 
-		errorEmbed.data
+		const errorEmbed = new EmbedBuilder()
+			.setColor(commonVariable.errorEmbedColorCode)
+			.setTimestamp()
+			.setFooter(commonVariable.embedFooter)
+
 			.setTitle("Support server")
-			.setDescription(`There was an error while executing this command!  `)
-			.setFields({ name: 'Support Server', value: commonVariable.supportLink, inline: true })
+			.setDescription("Contact the support by joining ")
+
+		const urlButton = new ButtonBuilder()
+			.setLabel('Join now')
+			.setURL(commonVariable.supportLink)
+			.setStyle(ButtonStyle.Link);
+
+		const row = new ActionRowBuilder()
+			.addComponents(urlButton);
+
 
 		if (interaction.replied || interaction.deferred) {
-			await interaction.followUp({ embeds: [errorEmbed.data], files: [file], ephemeral: true });
+			await interaction.followUp({ embeds: [errorEmbed], files: [file], ephemeral: true, components: [row] });
 		} else {
-			await interaction.reply({ embeds: [errorEmbed.data], files: [file], ephemeral: true });
+			await interaction.reply({ embeds: [errorEmbed], files: [file], ephemeral: true, components: [row] });
 		}
 	}
 });

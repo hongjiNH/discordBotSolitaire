@@ -1,9 +1,8 @@
-const defaultEmbed = require('../../share/embed/defaultEmbed');
 const file = require('../../share/file');
 const commonVariable = require('../../share/index');
 const formatTime = require('../../share/formatTime');
 
-const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
+const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle,EmbedBuilder } = require("discord.js");
 const calculateTime = require('../../share/calculateTime');
 
 module.exports = {
@@ -94,23 +93,29 @@ module.exports = {
             const title = interaction.options.getString('title');
             const question = interaction.options.getString('question');
             const directmessage = interaction.options.getBoolean('directmessage');
-            const role = interaction.options.getRole('role').name;
+            const role = interaction.options.getRole('role');
+            console.log(interaction.options.getRole('role')!==null);
 
             let list = [];
             let temList = [];
 
             let timeInMilliseconds = calculateTime(null, interaction.options?.getInteger('days'), interaction.options?.getInteger('hours'), interaction.options.getInteger('minutes'));
 
+            const defaultEmbed = new EmbedBuilder()
+            .setColor(commonVariable.defaultEmbedColorCode)
+            .setTimestamp()
+            .setFooter(commonVariable.embedFooter)
+
             switch (interaction.options._subcommand) {
                 case 'day':
-                    defaultEmbed.data.setTitle(title + "  will close in " + formatTime(timeInMilliseconds));
+                    defaultEmbed.setTitle(title + "  will close in " + formatTime(timeInMilliseconds));
 
                     break;
                 case 'hour':
-                    defaultEmbed.data.setTitle(title + "  will close in " + formatTime(timeInMilliseconds));
+                    defaultEmbed.setTitle(title + "  will close in " + formatTime(timeInMilliseconds));
                     break;
                 case 'minute':
-                    defaultEmbed.data.setTitle(title + "  will close in " + formatTime(timeInMilliseconds));
+                    defaultEmbed.setTitle(title + "  will close in " + formatTime(timeInMilliseconds));
                     break;
             }
             const addButton = new ButtonBuilder()
@@ -131,18 +136,18 @@ module.exports = {
             const row = new ActionRowBuilder()
                 .addComponents(addButton, removeButton, closeButton);
 
-            if (role !== null || role !== undefined) {
-                defaultEmbed.data.setDescription(question + "?" +role + ' Check out this list');
+            if (role !== null ) {
+                defaultEmbed.setDescription(question + "? " +role.name + ' Check out this list');
             }
             else{
-                defaultEmbed.data.setDescription(question + "?" );
+                defaultEmbed.setDescription(question + "?" );
             }
           
-            defaultEmbed.data.setFields(
+            defaultEmbed.setFields(
                 { name: 'No one yet', value: "\u200B", inline: true },
             );
 
-            const response = await interaction.reply({ embeds: [defaultEmbed.data], files: [file], components: [row] });
+            const response = await interaction.reply({ embeds: [defaultEmbed], files: [file], components: [row] });
 
             let countdown = timeInMilliseconds;
 
@@ -152,11 +157,11 @@ module.exports = {
 
                 const remainingTime = formatTime(countdown);
 
-                defaultEmbed.data
+                defaultEmbed
                     .setTitle(`${title}, Countdown: ${remainingTime} remaining.`)
                     .setDescription(question + ' ?');
 
-                interaction.editReply({ embeds: [defaultEmbed.data] });
+                interaction.editReply({ embeds: [defaultEmbed] });
 
                 if (countdown <= 0) {
                     endFormFunction();
@@ -171,26 +176,26 @@ module.exports = {
                 removeButton.setDisabled(true);
                 closeButton.setDisabled(true);
 
-                defaultEmbed.data.setTitle(title + " is close  ").setFields();
+                defaultEmbed.setTitle(title + " is close  ").setFields();
 
                 if (list.length !== 0) {
                     for (let i = 0; i < list.length; i++) {
-                        defaultEmbed.data.addFields(
+                        defaultEmbed.addFields(
                             { name: i + 1 + ") " + list[i], value: "\u200B", inline: true },
                         );
                     }
                 }
                 else {
-                    defaultEmbed.data.setFields(
+                    defaultEmbed.setFields(
                         { name: 'No one yet', value: "\u200B", inline: true },
                     );
                 }
 
-                interaction.editReply({ embeds: [defaultEmbed.data], components: [row] });
+                interaction.editReply({ embeds: [defaultEmbed], components: [row] });
 
                 if (directmessage === true) {
                     client.users.fetch(interaction.user.id, false).then((user) => {
-                        user.send({ embeds: [defaultEmbed.data] });
+                        user.send({ embeds: [defaultEmbed] });
                     })
                 }
             }
@@ -221,28 +226,28 @@ module.exports = {
                 }
 
                 if (confirmation.customId !== 'closerForm_' + commonVariable.solitaire) {
-                    defaultEmbed.data
+                    defaultEmbed
                         .setTitle(`${title}, Countdown: ${formatTime(countdown)} remaining.`)
                         .setDescription(question + ' ?')
                         .setFields();
 
                     if (list.length !== 0) {
                         for (let i = 0; i < list.length; i++) {
-                            defaultEmbed.data.addFields(
+                            defaultEmbed.addFields(
                                 { name: i + 1 + ")  " + list[i], value: "\u200B", inline: true },
                             );
                         }
                     }
 
                     else {
-                        defaultEmbed.data.setFields(
+                        defaultEmbed.setFields(
                             { name: 'No one yet', value: "\u200B", inline: true },
                         );
                     }
 
                 }
 
-                await confirmation.update({ embeds: [defaultEmbed.data], files: [file], components: [row] });
+                await confirmation.update({ embeds: [defaultEmbed], files: [file], components: [row] });
 
             }
         }

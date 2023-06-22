@@ -1,19 +1,30 @@
-const defaultEmbed =require('../../share/embed/defaultEmbed');
-const file=require('../../share/file')
-const commonVariable=require('../../share/index');
+const file = require('../../share/file')
+const commonVariable = require('../../share/index');
 
-const { SlashCommandBuilder} = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName(commonVariable.addbot)
-		.setDescription("Adding "+commonVariable.botName+' to other server'),
-	async execute(interaction) {
-		defaultEmbed.data
-		.setTitle("Bot say...")
-		.setFields({name:'URL',value:commonVariable.addBotUrl})
-		.setDescription('This bot is set to have admin rigth .');
+		.setDescription("Adding " + commonVariable.botName + ' to other server'),
 
-		return interaction.reply({ embeds: [defaultEmbed.data], files: [file] });
+	async execute(interaction) {
+
+		const defaultEmbed = new EmbedBuilder()
+			.setColor(commonVariable.defaultEmbedColorCode)
+			.setTimestamp()
+			.setFooter(commonVariable.embedFooter)
+			
+			.setTitle('This bot is set to have admin rigth .');
+
+		const urlButton = new ButtonBuilder()
+			.setLabel('Invite now')
+			.setURL(commonVariable.addBotUrl)
+			.setStyle(ButtonStyle.Link);
+
+		const row = new ActionRowBuilder()
+			.addComponents(urlButton);
+
+		return interaction.reply({ embeds: [defaultEmbed], files: [file], components: [row] });
 	},
 };

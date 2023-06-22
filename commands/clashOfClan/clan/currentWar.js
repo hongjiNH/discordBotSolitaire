@@ -1,9 +1,8 @@
-const defaultEmbed = require('../../../share/embed/defaultEmbed');
 const file = require('../../../share/file')
 const commonVariable = require('../../../share/index');
 const cocClient = require('../../../share/coc/cocClientLogin');
 const cocClanWarStatus = require('../../../share/coc/cocClanWarStatus');
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -21,49 +20,75 @@ module.exports = {
         try {
             const clan = await cocClient.cocClientLogin.getCurrentWar(clanTag);
 
+            let clanwarStauts="";
+
+            const defaultEmbed = new EmbedBuilder()
+                .setColor(commonVariable.defaultEmbedColorCode)
+                .setTimestamp()
+                .setFooter(commonVariable.embedFooter);
+
             switch (clan.state) {
                 case "notInWar":
-                    defaultEmbed.data.setTitle("Not in war").setDescription('Your clan is not in any war now').setFields();
+                    defaultEmbed.setTitle("Not in war").setDescription('Your clan is not in any war now');
                     break;
                 case "preparation":
-                    defaultEmbed.data.setTitle("Preparing for war with " + `**${clan.opponent.name}**`).setDescription('Your clan are preparinng for war')
+                    defaultEmbed.setTitle("Preparing for war with " + `**${clan.opponent.name}**`).setDescription('Your clan are preparinng for war')
                         .setFields(
                             { name: 'Team size', value: `**${clan.teamSize}**` },
+                            { name: 'Start at', value: `**${clan.startTime}**` },
                         );
                     break;
 
                 case "inWar":
-                    defaultEmbed.data.setTitle("Fighting with " + `**${clan.opponent.name}**`).setDescription('Currently fighting, wish yall all the best')
+                    defaultEmbed.setTitle("Fighting with " + `**${clan.opponent.name}**`).setDescription('Currently fighting, wish yall all the best')
                         .setFields(
-                            { name: 'Team size', value: `**${clan.teamSize}**` });
+                            { name: 'Team size', value: `**${clan.teamSize}**` },
+                            { name: 'End at', value: `**${clan.endTime}**` },);
 
-                    cocClanWarStatus(clan);
+                     clanwarStauts = cocClanWarStatus(clan);
 
-                    defaultEmbed.data.addFields(
+                    defaultEmbed.addFields(
+                        clanwarStauts,
                         { name: "Your team total stars", value: `**${clan.clan.stars}**` },
                         { name: "Opponent team total stars", value: `**${clan.opponent.stars}**` });
 
                     break;
 
                 case "warEnded":
-                    defaultEmbed.data.setTitle("War ended with " + `**${clan.opponent.name}**`).setDescription('End of clan war')
+                    defaultEmbed.setTitle("War ended with " + `**${clan.opponent.name}**`).setDescription('End of clan war')
                         .setFields(
                             { name: 'Team size', value: `**${clan.teamSize}**` });
 
-                    cocClanWarStatus(clan);
+                     clanwarStauts = cocClanWarStatus(clan);
 
-                    defaultEmbed.data.addFields(
+                    defaultEmbed.addFields(
+                        clanwarStauts,
                         { name: "Your team total stars", value: `**${clan.clan.stars}**` },
                         { name: "Opponent team total stars", value: `**${clan.opponent.stars}**` });
 
                     break;
             }
 
-            return interaction.reply({ embeds: [defaultEmbed.data], files: [file] });
+            return interaction.reply({ embeds: [defaultEmbed], files: [file] });
         }
         catch (error) {
+            if(error.status==500 || error.status===403){
 
-            return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [file] });
+                const urlButton = new ButtonBuilder()
+                .setLabel('Join now')
+                .setURL(commonVariable.supportLink)
+                .setStyle(ButtonStyle.Link);
+    
+            const row = new ActionRowBuilder()
+                .addComponents(urlButton);
+
+                return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [file], components: [row] });
+
+            }
+            else{
+                return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [file] });
+
+            }
 
         }
 

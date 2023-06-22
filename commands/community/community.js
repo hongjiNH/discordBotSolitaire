@@ -1,20 +1,29 @@
-const errorEmbed =require('../../share/embed/errorEmbed');
-const file=require('../../share/file')
+const file = require('../../share/file')
+const commonVariable = require('../../share/index');
 
-const commonVariable=require('../../share/index');
+const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require("discord.js");
 
-const { SlashCommandBuilder  } = require("discord.js");
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName(commonVariable.community)
-		.setDescription("@nothealthy community server " ),
+		.setDescription("@nothealthy community server "),
 	async execute(interaction) {
-		errorEmbed.data
-		.setTitle("Community server")
-		.setDescription("Contact the support by joining " )
-		.setFields({ name: 'Community Server', value: commonVariable.communityLink, inline: true })
-		
 
-		return interaction.reply({ embeds: [errorEmbed.data], files: [file] });
+		const defaultEmbed = new EmbedBuilder()
+			.setColor(commonVariable.defaultEmbedColorCode)
+			.setTimestamp()
+			.setFooter(commonVariable.embedFooter)
+
+			.setTitle("Community server")
+
+		const urlButton = new ButtonBuilder()
+			.setLabel('Join now')
+			.setURL(commonVariable.communityLink)
+			.setStyle(ButtonStyle.Link);
+
+		const row = new ActionRowBuilder()
+			.addComponents(urlButton);
+
+		return interaction.reply({ embeds: [defaultEmbed], files: [file], components: [row] });
 	},
 };

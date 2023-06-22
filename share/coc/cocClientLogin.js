@@ -1,6 +1,5 @@
 require('dotenv').config();
 
-const errorEmbed = require('../embed/errorEmbed');
 const commonVariable=require('../index');
 const { Client } = require('clashofclans.js');
 
@@ -10,55 +9,57 @@ const coctoken = process.env.cocToken;
 const client = new Client({ keys: [coctoken] });
 module.exports.cocClientLogin = client;
 
+const {  EmbedBuilder } = require("discord.js");
+
 
 module.exports.cocClientError = (errorStatus) => {
+
+    const errorEmbed = new EmbedBuilder()
+    .setColor(commonVariable.errorEmbedColorCode)
+    .setTimestamp()
+    .setFooter(commonVariable.embedFooter)
+
     
     switch (errorStatus) {
         case 400:
-            errorEmbed.data
+            errorEmbed
                 .setTitle('Incorrect input')
                 .setDescription(`Kindly check ur input as you might have miss spelled /missing letter`)
-                .setFields();
             break;
         case 403:
-            errorEmbed.data
+            errorEmbed
                 .setTitle('Access denined due to clash of clan api issue')
                 .setDescription(`Kindly join the support server to inform the support about this thank you  `)
-                .setFields({ name: 'Support Server', value: commonVariable.supportLink, inline: true })
             break;
         case 404:
-            errorEmbed.data
+            errorEmbed
                 .setTitle('Resources Not found')
                 .setDescription(`Kindly check ur input as you might have miss spelled /missing letter`)
-                .setFields()
             break;
         case 429:
-            errorEmbed.data
+            errorEmbed
                 .setTitle('Request was throttled')
                 .setDescription(`Clash of clan api have a limit of request per time, kindly wait for awhile before trying`)
-                .setFields()
             break;
         case 500:
-            errorEmbed.data
+            errorEmbed
                 .setTitle('Unknown error happened when handling the Clash of clan request ')
                 .setDescription(`Kindly join the support server to inform the support about this thank you  `)
-                .setFields({ name: 'Support Server', value: commonVariable.supportLink, inline: true })
             break;
         case 503:
-            errorEmbed.data
+            errorEmbed
                 .setTitle('Clash of clan maintenance  ')
                 .setDescription(`Service is temprorarily unavailable because of maintenance  `)
-                .setFields()
             break;
         // default:
-        //     errorEmbed.data
+        //     errorEmbed
         //         .setTitle('Unknown error happened when handling the Clash of clan request code: '+errorStatus)
         //         .setDescription(`Kindly join the support server to inform the support about this thank you  `)
         //         .setFields({ name: 'Support Server', value: commonVariable.supportLink, inline: true })
         //     break;
     }
 
-    return errorEmbed.data;
+    return errorEmbed;
 
 
 }

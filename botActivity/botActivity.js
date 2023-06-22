@@ -26,7 +26,6 @@ module.exports = (client,Guilds) => {
             type:randomStatus.type,
         });
 
-
     }
 
     return changeStatus();

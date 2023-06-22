@@ -1,10 +1,10 @@
-const calculateTime = require('../../share/calculateTime');
-const defaultEmbed = require('../../share/embed/defaultEmbed');
 const file = require('../../share/file')
 const formatTime = require('../../share/formatTime');
 const commonVariable = require('../../share/index');
+const calculateTime = require('../../share/calculateTime');
 
-const { SlashCommandBuilder, userMention, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
+
+const { SlashCommandBuilder, userMention, ActionRowBuilder, ButtonBuilder, ButtonStyle,EmbedBuilder } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -137,12 +137,14 @@ module.exports = {
 
         let timeInMilliseconds = calculateTime(interaction.options?.getInteger('weeks'), interaction.options?.getInteger('days'), interaction.options?.getInteger('hours'), interaction.options.getInteger('minutes'));
 
-        let response='';
+        let response = '';
 
-        defaultEmbed.data
-            .setDescription('\u200b')
+        const defaultEmbed = new EmbedBuilder()
+            .setColor(commonVariable.defaultEmbedColorCode)
+            .setTimestamp()
+            .setFooter(commonVariable.embedFooter)
+
             .setFields({ name: "Your message", value: messagestart })
-
 
         const closeButton = new ButtonBuilder()
             .setCustomId('closerForm_' + commonVariable.solitaire)
@@ -155,45 +157,45 @@ module.exports = {
         switch (interaction.options._subcommand) {
             case 'day':
                 timeInMilliseconds =
-                    defaultEmbed.data.setTitle("Your count down timer is set to: " + formatTime(timeInMilliseconds));
+                    defaultEmbed.setTitle("Your count down timer is set to: " + formatTime(timeInMilliseconds));
                 break;
             case 'hour':
-                defaultEmbed.data.setTitle("Your count down timer is set to: " + formatTime(timeInMilliseconds));
+                defaultEmbed.setTitle("Your count down timer is set to: " + formatTime(timeInMilliseconds));
                 break;
             case 'minute':
-                defaultEmbed.data.setTitle("Your count down timer is set to: " + formatTime(timeInMilliseconds));
+                defaultEmbed.setTitle("Your count down timer is set to: " + formatTime(timeInMilliseconds));
                 break;
             case 'week':
-                defaultEmbed.data.setTitle("Your count down timer is set to: " + formatTime(formatTime(timeInMilliseconds)));
+                defaultEmbed.setTitle("Your count down timer is set to: " + formatTime(formatTime(timeInMilliseconds)));
                 break;
         }
 
         if (public === false) {
-           response= await interaction.reply({ embeds: [defaultEmbed.data], files: [file], components: [row], ephemeral: true });
+            response = await interaction.reply({ embeds: [defaultEmbed], files: [file], components: [row], ephemeral: true });
         }
         else {
-            response= await interaction.reply({ embeds: [defaultEmbed.data], files: [file], components: [row] });
+            response = await interaction.reply({ embeds: [defaultEmbed], files: [file], components: [row] });
         }
 
         let countdown = timeInMilliseconds;
 
 
-        const endFormFunction=()=>{
-            
+        const endFormFunction = () => {
+
             closeButton.setDisabled(true);
             clearInterval(countdownInterval);
 
-            defaultEmbed.data.setTitle('Count down timer has stop.').setFields({ name: 'Your message', value: messageend });
+            defaultEmbed.setTitle('Count down timer has stop.').setFields({ name: 'Your message', value: messageend });
 
             if (public === false) {
 
                 if (directmessage === true) {
                     // user wanted to receive it in their dm
                     client.users.fetch(interaction.user.id, false).then((user) => {
-                        user.send({ embeds: [defaultEmbed.data] });
+                        user.send({ embeds: [defaultEmbed] });
                     });
                 }
-                interaction.editReply({ embeds: [defaultEmbed.data], components: [row], ephemeral: true });
+                interaction.editReply({ embeds: [defaultEmbed], components: [row], ephemeral: true });
             }
             else {
 
@@ -201,35 +203,35 @@ module.exports = {
                 if (directmessage === true) {
                     //user  wanted ot receive it in their dm
                     client.users.fetch(interaction.user.id, false).then((user) => {
-                        user.send({ embeds: [defaultEmbed.data] });
+                        user.send({ embeds: [defaultEmbed] });
                     });
                 }
 
-                interaction.editReply({ embeds: [defaultEmbed.data], components: [row] });
+                interaction.editReply({ embeds: [defaultEmbed], components: [row] });
             }
 
         }
 
         const countdownInterval = setInterval(() => {
 
-            countdown -=  commonVariable.interval;
+            countdown -= commonVariable.interval;
 
             const remainingTime = formatTime(countdown);
 
-            defaultEmbed.data
+            defaultEmbed
                 .setTitle(`Countdown: ${remainingTime} remaining.`)
                 .setFields({ name: "Your message", value: messagestart });
 
-            interaction.editReply({ embeds: [defaultEmbed.data] });
+            interaction.editReply({ embeds: [defaultEmbed] });
 
             if (countdown <= 0) {
                 endFormFunction();
             }
 
 
-        },  commonVariable.interval)
+        }, commonVariable.interval)
 
-        
+
         while (countdown >= 0) {
             const confirmation = await response.awaitMessageComponent();
 
@@ -238,7 +240,7 @@ module.exports = {
                 endFormFunction();
             }
 
-            await confirmation.update({ embeds: [defaultEmbed.data], files: [file], components: [row] });
+            await confirmation.update({ embeds: [defaultEmbed], files: [file], components: [row] });
 
         }
     },

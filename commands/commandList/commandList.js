@@ -1,8 +1,7 @@
-const defaultEmbed =require('../../share/embed/defaultEmbed');
 const file=require('../../share/file');
 const commonVariable=require('../../share/index');
 
-const { SlashCommandBuilder, codeBlock } = require("discord.js");
+const { SlashCommandBuilder, codeBlock,EmbedBuilder } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -10,7 +9,11 @@ module.exports = {
         .setDescription("List of command for bot: " + commonVariable.botName),
     async execute(interaction) {
 
-        defaultEmbed.data
+        const defaultEmbed = new EmbedBuilder()
+        .setColor(commonVariable.defaultEmbedColorCode)
+        .setTimestamp()
+        .setFooter(commonVariable.embedFooter)
+        
         .setTitle("Normal Command List")
         .setFields(
             { name: 'Ping with the bot', value: codeBlock("/"+commonVariable.ping)},
@@ -23,10 +26,10 @@ module.exports = {
             { name: 'Adding my bot to other server', value: codeBlock("/"+commonVariable.addbot) }
         )
         .setDescription("The list of the normal command for bot: " +commonVariable.botName);
-        await interaction.reply({ embeds: [defaultEmbed.data], files: [file] });
+        await interaction.reply({ embeds: [defaultEmbed], files: [file] });
 
         //COC
-        defaultEmbed.data
+        defaultEmbed
         .setTitle("COC Command List")
         .setFields(
             { name: 'Retrieve information about clan\'s current clan war ', value: codeBlock("/"+commonVariable.cocCurrentWar) },

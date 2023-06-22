@@ -1,8 +1,7 @@
-const defaultEmbed = require('../../../share/embed/defaultEmbed');
 const file = require('../../../share/file')
 const commonVariable = require('../../../share/index');
 const cocClient = require('../../../share/coc/cocClientLogin');
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle  } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -15,21 +14,39 @@ module.exports = {
 
         try {
             const clan = await cocClient.cocClientLogin.getGoldPassSeason();
-            console.log(clan);
-            
 
-            defaultEmbed.data
+
+            const defaultEmbed = new EmbedBuilder()
+                .setColor(commonVariable.defaultEmbedColorCode)
+                .setTimestamp()
+                .setFooter(commonVariable.embedFooter)
                 .setTitle("Clash Of Clan Gold Pass")
                 .setDescription(`It will end in ${clan.endTime}`)
                 .setFields(
                     { name: 'Start time', value: `${clan.startTime}` },
                     { name: 'End time', value: `${clan.endTime}` });
 
-            return interaction.reply({ embeds: [defaultEmbed.data], files: [file] });
+            return interaction.reply({ embeds: [defaultEmbed], files: [file] });
         }
         catch (error) {
 
-            return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [file] });
+            if (error.status == 500 || error.status === 403) {
+
+                const urlButton = new ButtonBuilder()
+                    .setLabel('Join now')
+                    .setURL(commonVariable.supportLink)
+                    .setStyle(ButtonStyle.Link);
+
+                const row = new ActionRowBuilder()
+                    .addComponents(urlButton);
+
+                return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [file], components: [row] });
+
+            }
+            else {
+                return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [file] });
+
+            }
 
         }
 

@@ -1,11 +1,11 @@
-const defaultEmbed = require('../../../share/embed/defaultEmbed');
+
 const file = require('../../../share/file')
-const commonVariable = require('../../../share/index');
+const conmmonVariable = require('../../../share/index');
 const cocClient = require('../../../share/coc/cocClientLogin');
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle  } = require("discord.js");
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName(commonVariable.cocGetClanInfo)
+        .setName(conmmonVariable.cocGetClanInfo)
         .setDescription('Get clan information ')
         .addStringOption(option => option.setName('clantag')
             .setDescription('Enter your clan tag etc #2PPP')
@@ -20,7 +20,11 @@ module.exports = {
 
             const clan = await cocClient.cocClientLogin.getClan(clanTag);
 
-            defaultEmbed.data
+            const defaultEmbed = new EmbedBuilder()
+                .setColor(commonVariable.defaultEmbedColorCode)
+                .setTimestamp()
+                .setFooter(commonVariable.embedFooter)
+
                 .setTitle(`${clan.name}\'s info`)
                 .setDescription('Total member: ' + clan.memberCount)
                 .setFields(
@@ -42,16 +46,32 @@ module.exports = {
 
             for (let i = 0; i < clan.clanCapital.districts.length; i++) {
                 defaultEmbed.data.addFields(
-                    { name:`${clan.clanCapital.districts[i].name}`, value: `${clan.clanCapital.districts[i].districtHallLevel}`, inline: true },
+                    { name: `${clan.clanCapital.districts[i].name}`, value: `${clan.clanCapital.districts[i].districtHallLevel}`, inline: true },
                 );
             };
 
-            return interaction.reply({ embeds: [defaultEmbed.data], files: [file] });
+            return interaction.reply({ embeds: [defaultEmbed], files: [file] });
 
         }
         catch (error) {
 
-            return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [file] });
+            if (error.status == 500 || error.status === 403) {
+
+                const urlButton = new ButtonBuilder()
+                    .setLabel('Join now')
+                    .setURL(commonVariable.supportLink)
+                    .setStyle(ButtonStyle.Link);
+
+                const row = new ActionRowBuilder()
+                    .addComponents(urlButton);
+
+                return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [file], components: [row] });
+
+            }
+            else {
+                return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [file] });
+
+            }
 
         }
 

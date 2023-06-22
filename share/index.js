@@ -1,7 +1,7 @@
 // all the commonly use variable will be place here
 
 module.exports.supportLink ="https://discord.gg/CbGhn6cmpp"
-module.exports.version ="Version 0.0.1"
+module.exports.versionNo ="Version 0.0.1"
 module.exports.botName ="Test01"
 module.exports.logo =`pic1.png`
 module.exports.donation ="https://streamlabs.com/nothealthyofficial/tip"
@@ -23,8 +23,13 @@ module.exports.addbot='addbot';
 module.exports.cocCurrentWar="coccw";
 //module.exports.cocListMember="coclm";
 module.exports.cocGetClanInfo="cocgcl";
-module.exports.cocGoldPass="cocgl";
+module.exports.cocGoldPass="cocgp";
 //module.exports.cocWarLog="cocwarlog";
 
 // module.exports.cocCurrentWarLeagueGroup="coccwlg";
 // module.exports.cocIndividualWarLeague="coccwl";
+
+//embed
+module.exports.defaultEmbedColorCode=0x0099FF;
+module.exports.errorEmbedColorCode=0xED4245;
+module.exports.embedFooter={ text: `By @nothealthy - youtube channel`, iconURL: 'attachment://'+this.logo}

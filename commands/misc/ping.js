@@ -1,8 +1,7 @@
-const defaultEmbed =require('../../share/embed/defaultEmbed');
 const file=require('../../share/file')
 const commonVariable=require('../../share/index');
 
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder,EmbedBuilder } = require("discord.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -10,12 +9,13 @@ module.exports = {
 		.setDescription('Replies with Pong!'),
 
 	async execute(interaction) {
+		const defaultEmbed = new EmbedBuilder()
+		.setColor(commonVariable.defaultEmbedColorCode)
+		.setTimestamp()
+		.setFooter(commonVariable.embedFooter)
 		
-		defaultEmbed.data
 		.setDescription('Pong')
-		.setFields()
-		.setTitle("Bot say ...");
 
-		return interaction.reply({ embeds: [defaultEmbed.data], files: [file] });
+		return interaction.reply({ embeds: [defaultEmbed], files: [file] });
 	},
 };
