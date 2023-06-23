@@ -105,18 +105,8 @@ module.exports = {
             .setTimestamp()
             .setFooter(commonVariable.embedFooter)
 
-            switch (interaction.options._subcommand) {
-                case 'day':
-                    defaultEmbed.setTitle(title + "  will close in " + formatTime(timeInMilliseconds));
-
-                    break;
-                case 'hour':
-                    defaultEmbed.setTitle(title + "  will close in " + formatTime(timeInMilliseconds));
-                    break;
-                case 'minute':
-                    defaultEmbed.setTitle(title + "  will close in " + formatTime(timeInMilliseconds));
-                    break;
-            }
+            defaultEmbed.setTitle(title + "  will close in " + formatTime(timeInMilliseconds));
+            
             const addButton = new ButtonBuilder()
                 .setCustomId('addUser_' + commonVariable.solitaire)
                 .setLabel('add me in')

@@ -43,7 +43,6 @@ module.exports = {
                     // The user doesn't have the specified role
                     const role=await interaction.guild.roles.create({
                         name: clan.name,
-                        color: 0xFFFF00,
                     });
 
                     createChannel(interaction,role.id,clan.name);

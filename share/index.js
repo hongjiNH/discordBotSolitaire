@@ -28,8 +28,8 @@ module.exports.cocCurrentWar="coccw";
 //module.exports.cocListMember="coclm";
 module.exports.cocGetClanInfo="cocgcl";
 module.exports.cocGoldPass="cocgp";
-
 module.exports.cocDiscordSetRole="cocdcsr";
+module.exports.cocCreateList="coccl";
 //module.exports.cocWarLog="cocwarlog";
 
 // module.exports.cocCurrentWarLeagueGroup="coccwlg";
