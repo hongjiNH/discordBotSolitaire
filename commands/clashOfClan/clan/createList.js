@@ -167,7 +167,7 @@
     
 //                 const countdownInterval = setInterval(() => {
     
-//                     countdown -= interval;
+//                     countdown -= commonVariable.interval;
     
 //                     const remainingTime = formatTime(countdown);
     

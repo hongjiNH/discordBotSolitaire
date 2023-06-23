@@ -93,7 +93,7 @@ module.exports = {
             const question = interaction.options.getString('question');
             const directmessage = interaction.options.getBoolean('directmessage');
             const role = interaction.options.getRole('role');
-            console.log(interaction.options.getRole('role')!==null);
+           // console.log(interaction.options.getRole('role')!==null);
 
             let list = [];
             let temList = [];
@@ -142,7 +142,7 @@ module.exports = {
 
             const countdownInterval = setInterval(() => {
 
-                countdown -= interval;
+                countdown -= commonVariable.interval;
 
                 const remainingTime = formatTime(countdown);
 
