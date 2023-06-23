@@ -31,12 +31,12 @@
 //                     console.log(defaultEmbed.data);
 //                     // if(interaction.){
 //                     //     defaultEmbed.data.setDescription("The other "+totalMember+' member ')
-//                     //     interaction.followUp({ embeds: [defaultEmbed.data], files: [file] });
+//                     //     interaction.followUp({ embeds: [defaultEmbed.data], files: [commonVariable.file] });
 
 //                     // }
 //                     // else{
 //                         defaultEmbed.data.setDescription("The first "+totalMember+' member ')
-//                         interaction.reply({ embeds: [defaultEmbed.data], files: [file] });
+//                         interaction.reply({ embeds: [defaultEmbed.data], files: [commonVariable.file] });
 
 //                     // }
 //                     defaultEmbed.data.setFields();
@@ -56,12 +56,12 @@
 //            // defaultEmbed.data.setDescription("Total of "+totalMember+' member found')
 
 //            // console.log(clan);
-//             //return interaction.reply({ embeds: [defaultEmbed.data], files: [file] });
+//             //return interaction.reply({ embeds: [defaultEmbed.data], files: [commonVariable.file] });
 
 //         // }
 //         // catch (error) {
 
-//         //     return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [file] });
+//         //     return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [commonVariable.file] });
 
 //         // }
 

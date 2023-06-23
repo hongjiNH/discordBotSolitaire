@@ -1,4 +1,3 @@
-const file = require('../../../share/file')
 const commonVariable = require('../../../share/index');
 const cocClient = require('../../../share/coc/cocClientLogin');
 const cocClanWarStatus = require('../../../share/coc/cocClanWarStatus');
@@ -69,7 +68,7 @@ module.exports = {
                     break;
             }
 
-            return interaction.reply({ embeds: [defaultEmbed], files: [file] });
+            return interaction.reply({ embeds: [defaultEmbed], files: [commonVariable.file] });
         }
         catch (error) {
             if(error.status==500 || error.status===403){
@@ -82,11 +81,11 @@ module.exports = {
             const row = new ActionRowBuilder()
                 .addComponents(urlButton);
 
-                return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [file], components: [row] });
+                return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [commonVariable.file], components: [row] });
 
             }
             else{
-                return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [file] });
+                return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [commonVariable.file] });
 
             }
 

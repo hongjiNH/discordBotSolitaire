@@ -1,4 +1,3 @@
-const file = require('../../share/file')
 const commonVariable = require('../../share/index');
 
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require("discord.js");
@@ -24,6 +23,6 @@ module.exports = {
 		const row = new ActionRowBuilder()
 			.addComponents(urlButton);
 
-		return interaction.reply({ embeds: [defaultEmbed], files: [file], components: [row] });
+		return interaction.reply({ embeds: [defaultEmbed], files: [commonVariable.file], components: [row] });
 	},
 };

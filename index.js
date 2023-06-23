@@ -1,7 +1,6 @@
 require('dotenv').config();
 const fs = require('node:fs');
 const path = require('node:path');
-const file = require('./share/file');
 const changeStatus = require('./botActivity/botActivity')
 const commonVariable = require('./share/index');
 const autoUpdate = require('./deploy-commands')
@@ -86,7 +85,7 @@ client.on(Events.InteractionCreate, async interaction => {
 		await command.execute(interaction, client);
 	} catch (error) {
 
-		console.error(error);
+		//console.error(error);
 
 		const errorEmbed = new EmbedBuilder()
 			.setColor(commonVariable.errorEmbedColorCode)
@@ -105,9 +104,9 @@ client.on(Events.InteractionCreate, async interaction => {
 			.addComponents(urlButton);
 
 		if (interaction.replied || interaction.deferred) {
-			await interaction.followUp({ embeds: [errorEmbed], files: [file], ephemeral: true, components: [row] });
+			await interaction.followUp({ embeds: [errorEmbed], files: [commonVariable.file], ephemeral: true, components: [row] });
 		} else {
-			await interaction.reply({ embeds: [errorEmbed], files: [file], ephemeral: true, components: [row] });
+			await interaction.reply({ embeds: [errorEmbed], files: [commonVariable.file], ephemeral: true, components: [row] });
 		}
 	}
 });

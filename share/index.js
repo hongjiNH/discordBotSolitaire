@@ -1,3 +1,7 @@
+
+const { AttachmentBuilder} = require("discord.js");
+
+
 // all the commonly use variable will be place here
 
 module.exports.supportLink ="https://discord.gg/CbGhn6cmpp"
@@ -24,6 +28,8 @@ module.exports.cocCurrentWar="coccw";
 //module.exports.cocListMember="coclm";
 module.exports.cocGetClanInfo="cocgcl";
 module.exports.cocGoldPass="cocgp";
+
+module.exports.cocDiscordSetRole="cocdcsr";
 //module.exports.cocWarLog="cocwarlog";
 
 // module.exports.cocCurrentWarLeagueGroup="coccwlg";
@@ -33,3 +39,7 @@ module.exports.cocGoldPass="cocgp";
 module.exports.defaultEmbedColorCode=0x0099FF;
 module.exports.errorEmbedColorCode=0xED4245;
 module.exports.embedFooter={ text: `By @nothealthy - youtube channel`, iconURL: 'attachment://'+this.logo}
+
+
+//file
+module.exports.file = new AttachmentBuilder('../'+this.botName+'/assets/'+this.logo);

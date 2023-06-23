@@ -1,4 +1,3 @@
-const file = require('../../../share/file')
 const commonVariable = require('../../../share/index');
 const cocClient = require('../../../share/coc/cocClientLogin');
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle  } = require("discord.js");
@@ -26,7 +25,7 @@ module.exports = {
                     { name: 'Start time', value: `${clan.startTime}` },
                     { name: 'End time', value: `${clan.endTime}` });
 
-            return interaction.reply({ embeds: [defaultEmbed], files: [file] });
+            return interaction.reply({ embeds: [defaultEmbed], files: [commonVariable.file] });
         }
         catch (error) {
 
@@ -40,11 +39,11 @@ module.exports = {
                 const row = new ActionRowBuilder()
                     .addComponents(urlButton);
 
-                return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [file], components: [row] });
+                return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [commonVariable.file], components: [row] });
 
             }
             else {
-                return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [file] });
+                return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [commonVariable.file] });
 
             }
 

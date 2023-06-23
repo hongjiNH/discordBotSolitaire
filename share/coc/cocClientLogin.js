@@ -43,7 +43,7 @@ module.exports.cocClientError = (errorStatus) => {
             break;
         case 500:
             errorEmbed
-                .setTitle('Unknown error happened when handling the Clash of clan request ')
+                .setTitle('Unknown error happened when handling the Clash of clan request '+errorStatus)
                 .setDescription(`Kindly join the support server to inform the support about this thank you  `)
             break;
         case 503:
@@ -55,7 +55,6 @@ module.exports.cocClientError = (errorStatus) => {
         //     errorEmbed
         //         .setTitle('Unknown error happened when handling the Clash of clan request code: '+errorStatus)
         //         .setDescription(`Kindly join the support server to inform the support about this thank you  `)
-        //         .setFields({ name: 'Support Server', value: commonVariable.supportLink, inline: true })
         //     break;
     }
 

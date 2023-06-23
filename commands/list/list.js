@@ -1,4 +1,3 @@
-const file = require('../../share/file');
 const commonVariable = require('../../share/index');
 const formatTime = require('../../share/formatTime');
 
@@ -147,7 +146,7 @@ module.exports = {
                 { name: 'No one yet', value: "\u200B", inline: true },
             );
 
-            const response = await interaction.reply({ embeds: [defaultEmbed], files: [file], components: [row] });
+            const response = await interaction.reply({ embeds: [defaultEmbed], files: [commonVariable.file], components: [row] });
 
             let countdown = timeInMilliseconds;
 
@@ -247,7 +246,7 @@ module.exports = {
 
                 }
 
-                await confirmation.update({ embeds: [defaultEmbed], files: [file], components: [row] });
+                await confirmation.update({ embeds: [defaultEmbed], files: [commonVariable.file], components: [row] });
 
             }
         }

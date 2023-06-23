@@ -1,4 +1,3 @@
-const file=require('../../share/file')
 const commonVariable=require('../../share/index');
 
 const { SlashCommandBuilder,EmbedBuilder } = require("discord.js");
@@ -16,6 +15,6 @@ module.exports = {
 		
 		.setDescription('Pong')
 
-		return interaction.reply({ embeds: [defaultEmbed], files: [file] });
+		return interaction.reply({ embeds: [defaultEmbed], files: [commonVariable.file] });
 	},
 };

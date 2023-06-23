@@ -1,8 +1,6 @@
-const file = require('../../share/file')
 const formatTime = require('../../share/formatTime');
 const commonVariable = require('../../share/index');
 const calculateTime = require('../../share/calculateTime');
-
 
 const { SlashCommandBuilder, userMention, ActionRowBuilder, ButtonBuilder, ButtonStyle,EmbedBuilder } = require("discord.js");
 
@@ -171,10 +169,10 @@ module.exports = {
         }
 
         if (public === false) {
-            response = await interaction.reply({ embeds: [defaultEmbed], files: [file], components: [row], ephemeral: true });
+            response = await interaction.reply({ embeds: [defaultEmbed], files: [commonVariable.file], components: [row], ephemeral: true });
         }
         else {
-            response = await interaction.reply({ embeds: [defaultEmbed], files: [file], components: [row] });
+            response = await interaction.reply({ embeds: [defaultEmbed], files: [commonVariable.file], components: [row] });
         }
 
         let countdown = timeInMilliseconds;
@@ -240,7 +238,7 @@ module.exports = {
                 endFormFunction();
             }
 
-            await confirmation.update({ embeds: [defaultEmbed], files: [file], components: [row] });
+            await confirmation.update({ embeds: [defaultEmbed], files: [commonVariable.file], components: [row] });
 
         }
     },

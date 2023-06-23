@@ -1,4 +1,3 @@
-const file=require('../../share/file')
 const commonVariable=require('../../share/index');
 
 const { SlashCommandBuilder,EmbedBuilder} = require("discord.js");
@@ -18,6 +17,6 @@ module.exports = {
 		.setFields()
 		.setDescription("The current version of the bot is: " + `**${commonVariable.versionNo}**`)
 
-		return interaction.reply({ embeds: [defaultEmbed], files: [file] });
+		return interaction.reply({ embeds: [defaultEmbed], files: [commonVariable.file] });
 	},
 };

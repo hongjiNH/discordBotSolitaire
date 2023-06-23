@@ -1,4 +1,3 @@
-const file=require('../../share/file');
 const commonVariable=require('../../share/index');
 
 const { SlashCommandBuilder, codeBlock,EmbedBuilder } = require("discord.js");
@@ -37,11 +36,12 @@ module.exports = {
         .setFields(
             { name: 'Retrieve information about clan\'s current clan war ', value: codeBlock("/"+commonVariable.cocCurrentWar) },
            // { name: 'List clan members', value: codeBlock("/"+commonVariable.cocListMember) },
-            { name: 'Get clan informaiton', value: codeBlock("/"+commonVariable.cocGetClanInfo) }
+            { name: 'Get clan informaiton', value: codeBlock("/"+commonVariable.cocGetClanInfo)},
+            { name: 'Get Gold pass star and end date', value: codeBlock("/"+commonVariable.cocGoldPass)},
+            { name: 'Create a private channel with ur coc clan name , create a role with ur coc clan name , add a user in', value: codeBlock("/"+commonVariable.cocDiscordSetRole)},
         )
         .setDescription("The list of clash of clan command for bot: " +commonVariable.botName);
-        await interaction.reply({ embeds: [defaultEmbed,defaultEmbed1], files: [file] });
-
+        await interaction.reply({ embeds: [defaultEmbed,defaultEmbed1], files: [commonVariable.file] });
 
     },
 };
