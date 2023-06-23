@@ -56,17 +56,19 @@ module.exports = (guildId,client) => {
 	(async () => {
 		try {
 
-			let totalServer = 0;
-			for (let i = 0; i < guildId.length; i++) {
-				totalServer++;
+			// let totalServer = 0;
+			// for (let i = 0; i < guildId.length; i++) {
+			// 	totalServer++;
 
-				const commands1 = await client.guilds.cache.get(guildId[i]).commands.fetch();
-				if(commands1.length!==0){
-				 // Delete all the existing guild commands
-					await Promise.all(commands1.map(command => command.delete()));
-				}
+			// 	console.log(`Started refreshing ${commands.length} application (/) commands for guild ${guildId[i]}`);
+
+			// 	const commands1 = await client.guilds.cache.get(guildId[i]).commands.fetch();
+			// 	if(commands1.length!==0){
+			// 	 // Delete all the existing guild commands
+			// 		await Promise.all(commands1.map(command => command.delete()));
+			// 	}
 		
-			}
+			// }
 			
 			console.log(`Started refreshing ${commands.length} application (/) commands globally.`);
 

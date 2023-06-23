@@ -26,10 +26,13 @@ module.exports = {
             { name: 'Adding my bot to other server', value: codeBlock("/"+commonVariable.addbot) }
         )
         .setDescription("The list of the normal command for bot: " +commonVariable.botName);
-        await interaction.reply({ embeds: [defaultEmbed], files: [file] });
 
         //COC
-        defaultEmbed
+        const defaultEmbed1 = new EmbedBuilder()
+        .setColor(commonVariable.defaultEmbedColorCode)
+        .setTimestamp()
+        .setFooter(commonVariable.embedFooter)
+
         .setTitle("COC Command List")
         .setFields(
             { name: 'Retrieve information about clan\'s current clan war ', value: codeBlock("/"+commonVariable.cocCurrentWar) },
@@ -37,7 +40,7 @@ module.exports = {
             { name: 'Get clan informaiton', value: codeBlock("/"+commonVariable.cocGetClanInfo) }
         )
         .setDescription("The list of clash of clan command for bot: " +commonVariable.botName);
-        await interaction.followUp({ embeds: [defaultEmbed.data], files: [file] });
+        await interaction.reply({ embeds: [defaultEmbed,defaultEmbed1], files: [file] });
 
 
     },
