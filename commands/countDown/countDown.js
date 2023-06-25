@@ -1,6 +1,7 @@
 const formatTime = require('../../share/formatTime');
 const commonVariable = require('../../share/index');
 const calculateTime = require('../../share/calculateTime');
+const intervalCheck = require('../../share/intervalChecking');
 
 const { SlashCommandBuilder, userMention, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, PermissionsBitField } = require("discord.js");
 
@@ -31,6 +32,9 @@ module.exports = {
                     .setRequired(true)
                     .setMinValue(1)
                     .setMaxValue(30))
+                .addIntegerOption(option => option.setName('interval')
+                    .setDescription('The interval (in minute and <days) of to update the timer, default is 1 minutes')
+                    .setMinValue(1))
                 .addIntegerOption(option => option.setName('hours')
                     .setDescription('How many hour(s)')
                     .setMinValue(1)
@@ -62,6 +66,9 @@ module.exports = {
                     .setRequired(true)
                     .setMinValue(1)
                     .setMaxValue(24))
+                .addIntegerOption(option => option.setName('interval')
+                    .setDescription('The interval (in minute and <hours) of to update the timer, default is 1 minutes')
+                    .setMinValue(1))
                 .addIntegerOption(option => option.setName('minutes')
                     .setDescription('How many mintue(s)')
                     .setMinValue(1)
@@ -88,7 +95,10 @@ module.exports = {
                     .setDescription('How many mintue(s)')
                     .setRequired(true)
                     .setMinValue(1)
-                    .setMaxValue(60)))
+                    .setMaxValue(60))
+                .addIntegerOption(option => option.setName('interval')
+                    .setDescription('The interval (in minute and <minutes) of to update the timer, default is 1 minutes')
+                    .setMinValue(1)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('week')
@@ -112,6 +122,9 @@ module.exports = {
                     .setRequired(true)
                     .setMinValue(1)
                     .setMaxValue(60))
+                .addIntegerOption(option => option.setName('interval')
+                    .setDescription('The interval (in minute and <weeks) of to update the timer, default is 1 minutes')
+                    .setMinValue(1))
                 .addIntegerOption(option => option.setName('days')
                     .setDescription('How many day(s)')
                     .setMinValue(1)
@@ -196,9 +209,34 @@ module.exports = {
 
         }
 
+        //interval checking part still testing
+        let currentInterval = commonVariable.interval;
+
+        if (interaction.options.getInteger('interval') !== null) {
+
+            if (intervalCheck(countdown, interaction.options.getInteger('interval')) === false) {
+
+                const wrongUserEmbed = new EmbedBuilder()
+                    .setColor(commonVariable.errorEmbedColorCode)
+                    .setTimestamp()
+                    .setFooter(commonVariable.embedFooter)
+                    .setDescription('The interval u set is bigger then the count down time you set, therefore interval is set automatically to default 1 minute')
+
+                await interaction.followUp({ embeds: [wrongUserEmbed], files: [commonVariable.file], ephemeral: true })
+
+            }
+            else {
+                currentInterval = intervalCheck(countdown, interaction.options.getInteger('interval'));
+
+            }
+
+        }
+        //
+
+
         const countdownInterval = setInterval(() => {
 
-            countdown -= commonVariable.interval;
+            countdown -= currentInterval;
 
             const remainingTime = formatTime(countdown);
 
@@ -212,8 +250,7 @@ module.exports = {
                 endFormFunction();
             }
 
-
-        }, commonVariable.interval)
+        }, currentInterval)
 
 
         while (countdown >= 0) {
@@ -227,7 +264,7 @@ module.exports = {
 
                 const isAdmin = member.permissions.has([PermissionsBitField.Flags.Administrator]);
 
-                if ((interaction.user.id === confirmation.user.id)||(isAdmin===true)) {
+                if ((interaction.user.id === confirmation.user.id) || (isAdmin === true)) {
                     countdown = 0;
                     endFormFunction();
                     defaultEmbed.addFields({ name: 'Close by', value: 'Manual closse by ' + confirmation.user.username })

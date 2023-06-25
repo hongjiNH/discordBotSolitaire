@@ -1,8 +1,9 @@
 const commonVariable = require('../../share/index');
 const formatTime = require('../../share/formatTime');
-
-const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder,PermissionsBitField } = require("discord.js");
+const intervalCheck = require('../../share/intervalChecking');
 const calculateTime = require('../../share/calculateTime');
+
+const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, PermissionsBitField } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -28,6 +29,9 @@ module.exports = {
                     .setRequired(true)
                     .setMinValue(1)
                     .setMaxValue(30))
+                .addIntegerOption(option => option.setName('interval')
+                    .setDescription('The interval (in minute and <days) of to update the timer, default is 1 minutes')
+                    .setMinValue(1))
                 .addIntegerOption(option => option.setName('hours')
                     .setDescription('How many hour(s)')
                     .setMinValue(1)
@@ -58,6 +62,9 @@ module.exports = {
                     .setRequired(true)
                     .setMinValue(1)
                     .setMaxValue(24))
+                .addIntegerOption(option => option.setName('interval')
+                    .setDescription('The interval (in minute and <hours) of to update the timer, default is 1 minutes')
+                    .setMinValue(1))
                 .addIntegerOption(option => option.setName('minutes')
                     .setDescription('How many mintue(s)')
                     .setMinValue(1)
@@ -84,6 +91,9 @@ module.exports = {
                     .setRequired(true)
                     .setMinValue(1)
                     .setMaxValue(60))
+                .addIntegerOption(option => option.setName('interval')
+                    .setDescription('The interval (in minute and <minutes) of to update the timer, default is 1 minutes')
+                    .setMinValue(1))
                 .addRoleOption(option => option.setName('role')
                     .setDescription("Mention a role "))),
 
@@ -140,9 +150,33 @@ module.exports = {
 
             let countdown = timeInMilliseconds;
 
+            //interval checking part still testing
+            let currentInterval = commonVariable.interval;
+
+            if (interaction.options.getInteger('interval') !== null) {
+
+                if (intervalCheck(countdown, interaction.options.getInteger('interval')) === false) {
+
+                    const wrongUserEmbed = new EmbedBuilder()
+                        .setColor(commonVariable.errorEmbedColorCode)
+                        .setTimestamp()
+                        .setFooter(commonVariable.embedFooter)
+                        .setDescription('The interval u set is bigger then the count down time you set, therefore interval is set automatically to default 1 minute')
+
+                    await interaction.followUp({ embeds: [wrongUserEmbed], files: [commonVariable.file], ephemeral: true })
+
+                }
+                else {
+                    currentInterval = intervalCheck(countdown, interaction.options.getInteger('interval'));
+
+                }
+
+            }
+            //
+
             const countdownInterval = setInterval(() => {
 
-                countdown -= commonVariable.interval;
+                countdown -= currentInterval;
 
                 const remainingTime = formatTime(countdown);
 
@@ -156,7 +190,7 @@ module.exports = {
                     endFormFunction();
 
                 }
-            }, commonVariable.interval)
+            }, currentInterval)
 
             const addUserInList = () => {
 
