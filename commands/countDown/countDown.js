@@ -238,7 +238,7 @@ module.exports = {
                     await confirmation.update({ embeds: [defaultEmbed], files: [commonVariable.file], components: [row] });
 
                     const wrongUserEmbed = new EmbedBuilder()
-                        .setColor(commonVariable.defaultEmbedColorCode)
+                        .setColor(commonVariable.errorEmbedColorCode)
                         .setTimestamp()
                         .setFooter(commonVariable.embedFooter)
                         .setDescription('You cant close if you are not admin or the one who used the command!')
@@ -247,9 +247,6 @@ module.exports = {
 
                 }
             }
-
-
-
         }
     },
 

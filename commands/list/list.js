@@ -1,7 +1,7 @@
 const commonVariable = require('../../share/index');
 const formatTime = require('../../share/formatTime');
 
-const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle,EmbedBuilder } = require("discord.js");
+const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder,PermissionsBitField } = require("discord.js");
 const calculateTime = require('../../share/calculateTime');
 
 module.exports = {
@@ -93,7 +93,7 @@ module.exports = {
             const question = interaction.options.getString('question');
             const directmessage = interaction.options.getBoolean('directmessage');
             const role = interaction.options.getRole('role');
-           // console.log(interaction.options.getRole('role')!==null);
+            // console.log(interaction.options.getRole('role')!==null);
 
             let list = [];
             let temList = [];
@@ -101,12 +101,12 @@ module.exports = {
             let timeInMilliseconds = calculateTime(null, interaction.options?.getInteger('days'), interaction.options?.getInteger('hours'), interaction.options.getInteger('minutes'));
 
             const defaultEmbed = new EmbedBuilder()
-            .setColor(commonVariable.defaultEmbedColorCode)
-            .setTimestamp()
-            .setFooter(commonVariable.embedFooter)
+                .setColor(commonVariable.defaultEmbedColorCode)
+                .setTimestamp()
+                .setFooter(commonVariable.embedFooter)
 
             defaultEmbed.setTitle(title + "  will close in " + formatTime(timeInMilliseconds));
-            
+
             const addButton = new ButtonBuilder()
                 .setCustomId('addUser_' + commonVariable.solitaire)
                 .setLabel('add me in')
@@ -125,13 +125,13 @@ module.exports = {
             const row = new ActionRowBuilder()
                 .addComponents(addButton, removeButton, closeButton);
 
-            if (role !== null ) {
-                defaultEmbed.setDescription(question + "? " +role.name + ' Check out this list');
+            if (role !== null) {
+                defaultEmbed.setDescription(question + "? " + role.name + ' Check out this list');
             }
-            else{
-                defaultEmbed.setDescription(question + "?" );
+            else {
+                defaultEmbed.setDescription(question + "?");
             }
-          
+
             defaultEmbed.setFields(
                 { name: 'No one yet', value: "\u200B", inline: true },
             );
@@ -156,7 +156,25 @@ module.exports = {
                     endFormFunction();
 
                 }
-            },  commonVariable.interval)
+            }, commonVariable.interval)
+
+            const addUserInList = () => {
+
+
+                if (list.length !== 0) {
+                    for (let i = 0; i < list.length; i++) {
+                        defaultEmbed.addFields(
+                            { name: i + 1 + ")  " + list[i], value: "\u200B", inline: true },
+                        );
+                    }
+                }
+
+                else {
+                    defaultEmbed.setFields(
+                        { name: 'No one yet', value: "\u200B", inline: true },
+                    );
+                }
+            }
 
             const endFormFunction = () => {
 
@@ -167,18 +185,7 @@ module.exports = {
 
                 defaultEmbed.setTitle(title + " is close  ").setFields();
 
-                if (list.length !== 0) {
-                    for (let i = 0; i < list.length; i++) {
-                        defaultEmbed.addFields(
-                            { name: i + 1 + ") " + list[i], value: "\u200B", inline: true },
-                        );
-                    }
-                }
-                else {
-                    defaultEmbed.setFields(
-                        { name: 'No one yet', value: "\u200B", inline: true },
-                    );
-                }
+                addUserInList();
 
                 interaction.editReply({ embeds: [defaultEmbed], components: [row] });
 
@@ -193,9 +200,35 @@ module.exports = {
 
                 const confirmation = await response.awaitMessageComponent();
 
+                const notClosingForm = async () => {
+                    defaultEmbed
+                        .setTitle(`${title}, Countdown: ${formatTime(countdown)} remaining.`)
+                        .setDescription(question + ' ?')
+                        .setFields();
+
+                    addUserInList();
+
+                    await confirmation.update({ embeds: [defaultEmbed], files: [commonVariable.file], components: [row] });
+                }
+
                 if (confirmation.customId === 'addUser_' + commonVariable.solitaire) {
                     if (list.indexOf(confirmation.user.username) === -1) {
                         list.push(confirmation.user.username);
+
+                        notClosingForm();
+
+                    }
+                    else {
+
+                        await confirmation.update({ embeds: [defaultEmbed], files: [commonVariable.file], components: [row] });
+
+                        const wrongUserEmbed = new EmbedBuilder()
+                            .setColor(commonVariable.errorEmbedColorCode)
+                            .setTimestamp()
+                            .setFooter(commonVariable.embedFooter)
+                            .setDescription('How to add you when you are already in the list ...')
+
+                        await confirmation.followUp({ embeds: [wrongUserEmbed], files: [commonVariable.file], ephemeral: true })
                     }
                 }
                 else if (confirmation.customId === 'removeUser_' + commonVariable.solitaire) {
@@ -206,40 +239,52 @@ module.exports = {
                         list = [];
                         temList.map(name => list.push(name));
                         temList = [];
+
+                        notClosingForm();
+                    }
+                    else {
+
+                        await confirmation.update({ embeds: [defaultEmbed], files: [commonVariable.file], components: [row] });
+
+                        const wrongUserEmbed = new EmbedBuilder()
+                            .setColor(commonVariable.errorEmbedColorCode)
+                            .setTimestamp()
+                            .setFooter(commonVariable.embedFooter)
+                            .setDescription('How to remove when you are not in the list ...')
+
+                        await confirmation.followUp({ embeds: [wrongUserEmbed], files: [commonVariable.file], ephemeral: true })
                     }
                 }
                 else if (confirmation.customId === 'closerForm_' + commonVariable.solitaire) {
 
-                    countdown = 0;
-                    endFormFunction();
-                }
+                    const userId = confirmation.user.id;
+                    const guild = interaction.guild;
+                    const member = await guild.members.fetch(userId);
 
-                if (confirmation.customId !== 'closerForm_' + commonVariable.solitaire) {
-                    defaultEmbed
-                        .setTitle(`${title}, Countdown: ${formatTime(countdown)} remaining.`)
-                        .setDescription(question + ' ?')
-                        .setFields();
+                    const isAdmin = member.permissions.has([PermissionsBitField.Flags.Administrator]);
 
-                    if (list.length !== 0) {
-                        for (let i = 0; i < list.length; i++) {
-                            defaultEmbed.addFields(
-                                { name: i + 1 + ")  " + list[i], value: "\u200B", inline: true },
-                            );
-                        }
+                    if ((interaction.user.id === confirmation.user.id) || (isAdmin === true)) {
+
+                        countdown = 0;
+                        endFormFunction();
+                        defaultEmbed.addFields({ name: 'Close by', value: 'Manual closse by ' + confirmation.user.username })
+                        await confirmation.update({ embeds: [defaultEmbed], files: [commonVariable.file], components: [row] });
                     }
-
                     else {
-                        defaultEmbed.setFields(
-                            { name: 'No one yet', value: "\u200B", inline: true },
-                        );
+
+                        await confirmation.update({ embeds: [defaultEmbed], files: [commonVariable.file], components: [row] });
+
+                        const wrongUserEmbed = new EmbedBuilder()
+                            .setColor(commonVariable.errorEmbedColorCode)
+                            .setTimestamp()
+                            .setFooter(commonVariable.embedFooter)
+                            .setDescription('You cant close if you are not admin or the one who used the command!')
+
+                        await confirmation.followUp({ embeds: [wrongUserEmbed], files: [commonVariable.file], ephemeral: true })
+
                     }
-
                 }
-
-                await confirmation.update({ embeds: [defaultEmbed], files: [commonVariable.file], components: [row] });
-
             }
         }
     },
-
 };
