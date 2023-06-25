@@ -2,7 +2,7 @@ const formatTime = require('../../share/formatTime');
 const commonVariable = require('../../share/index');
 const calculateTime = require('../../share/calculateTime');
 
-const { SlashCommandBuilder, userMention, ActionRowBuilder, ButtonBuilder, ButtonStyle,EmbedBuilder } = require("discord.js");
+const { SlashCommandBuilder, userMention, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, PermissionsBitField } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -152,21 +152,7 @@ module.exports = {
         const row = new ActionRowBuilder()
             .addComponents(closeButton);
 
-        switch (interaction.options._subcommand) {
-            case 'day':
-                timeInMilliseconds =
-                    defaultEmbed.setTitle("Your count down timer is set to: " + formatTime(timeInMilliseconds));
-                break;
-            case 'hour':
-                defaultEmbed.setTitle("Your count down timer is set to: " + formatTime(timeInMilliseconds));
-                break;
-            case 'minute':
-                defaultEmbed.setTitle("Your count down timer is set to: " + formatTime(timeInMilliseconds));
-                break;
-            case 'week':
-                defaultEmbed.setTitle("Your count down timer is set to: " + formatTime(formatTime(timeInMilliseconds)));
-                break;
-        }
+        defaultEmbed.setTitle("Your count down timer is set to: " + formatTime(timeInMilliseconds));
 
         if (public === false) {
             response = await interaction.reply({ embeds: [defaultEmbed], files: [commonVariable.file], components: [row], ephemeral: true });
@@ -234,11 +220,35 @@ module.exports = {
             const confirmation = await response.awaitMessageComponent();
 
             if (confirmation.customId === 'closerForm_' + commonVariable.solitaire) {
-                countdown = 0;
-                endFormFunction();
+
+                const userId = confirmation.user.id;
+                const guild = interaction.guild;
+                const member = await guild.members.fetch(userId);
+
+                const isAdmin = member.permissions.has([PermissionsBitField.Flags.Administrator]);
+
+                if ((interaction.user.id === confirmation.user.id)||(isAdmin===true)) {
+                    countdown = 0;
+                    endFormFunction();
+                    defaultEmbed.addFields({ name: 'Close by', value: 'Manual closse by ' + confirmation.user.username })
+                    await confirmation.update({ embeds: [defaultEmbed], files: [commonVariable.file], components: [row] });
+                }
+                else {
+
+                    await confirmation.update({ embeds: [defaultEmbed], files: [commonVariable.file], components: [row] });
+
+                    const wrongUserEmbed = new EmbedBuilder()
+                        .setColor(commonVariable.defaultEmbedColorCode)
+                        .setTimestamp()
+                        .setFooter(commonVariable.embedFooter)
+                        .setDescription('You cant close if you are not admin or the one who used the command!')
+
+                    await confirmation.followUp({ embeds: [wrongUserEmbed], files: [commonVariable.file], ephemeral: true })
+
+                }
             }
 
-            await confirmation.update({ embeds: [defaultEmbed], files: [commonVariable.file], components: [row] });
+
 
         }
     },

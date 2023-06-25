@@ -8,8 +8,7 @@ module.exports = {
         .setDescription('Adding your role using your clash of clan, clan\' s name to access your private coc chat ')
         .addStringOption(option => option.setName('usertag')
             .setDescription('Enter your user tag etc #2PPP')
-            .setMaxLength(10)
-            .setMinLength(10)
+            .setMaxLength(20)
             .setRequired(true)),
     async execute(interaction) {
 

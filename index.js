@@ -85,7 +85,7 @@ client.on(Events.InteractionCreate, async interaction => {
 		await command.execute(interaction, client);
 	} catch (error) {
 
-		//console.error(error);
+		console.error(error);
 
 		const errorEmbed = new EmbedBuilder()
 			.setColor(commonVariable.errorEmbedColorCode)

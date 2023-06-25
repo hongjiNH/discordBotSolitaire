@@ -9,8 +9,7 @@
 //         .setDescription('List clan members. ')
 //         .addStringOption(option => option.setName('clantag')
 //             .setDescription('Enter your clan tag etc #2PPP')
-//             .setMaxLength(10)
-//             .setMinLength(10)
+// .setMaxLength(20)
 //             .setRequired(true)),
 //     async execute(interaction) {
 
