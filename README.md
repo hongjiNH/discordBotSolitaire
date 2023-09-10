@@ -4,3 +4,4 @@ When you start the bot, it will be automatically deploy/update the command list 
 For keys will be in .env files <br>
 For commonly used variable is place under *share>index.js* <br>
 To run the project *npm run start*
+To run the dev *npm run dev*
