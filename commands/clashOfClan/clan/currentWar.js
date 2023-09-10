@@ -1,6 +1,8 @@
 const commonVariable = require('../../../share/index');
 const cocClient = require('../../../share/coc/cocClientLogin');
 const cocClanWarStatus = require('../../../share/coc/cocClanWarStatus');
+const cocButtonRow = require('../../../share/buttonRow/cocButtonRow');
+
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 
 module.exports = {
@@ -18,7 +20,7 @@ module.exports = {
         try {
             const clan = await cocClient.cocClientLogin.getCurrentWar(clanTag);
 
-            let clanwarStauts="";
+            let clanwarStauts = "";
 
             const defaultEmbed = new EmbedBuilder()
                 .setColor(commonVariable.defaultEmbedColorCode)
@@ -43,7 +45,7 @@ module.exports = {
                             { name: 'Team size', value: `**${clan.teamSize}**` },
                             { name: 'End at', value: `**${clan.endTime}**` },);
 
-                     clanwarStauts = cocClanWarStatus(clan);
+                    clanwarStauts = cocClanWarStatus(clan);
 
                     defaultEmbed.addFields(
                         clanwarStauts,
@@ -57,7 +59,7 @@ module.exports = {
                         .setFields(
                             { name: 'Team size', value: `**${clan.teamSize}**` });
 
-                     clanwarStauts = cocClanWarStatus(clan);
+                    clanwarStauts = cocClanWarStatus(clan);
 
                     defaultEmbed.addFields(
                         clanwarStauts,
@@ -67,23 +69,23 @@ module.exports = {
                     break;
             }
 
-            return interaction.reply({ embeds: [defaultEmbed], files: [commonVariable.file] });
+            return interaction.reply({ embeds: [defaultEmbed], files: [commonVariable.file], components: [cocButtonRow(clanTag)] });
         }
         catch (error) {
-            if(error.status==500 || error.status===403){
+            if (error.status == 500 || error.status === 403) {
 
                 const urlButton = new ButtonBuilder()
-                .setLabel('Join now')
-                .setURL(commonVariable.supportLink)
-                .setStyle(ButtonStyle.Link);
-    
-            const row = new ActionRowBuilder()
-                .addComponents(urlButton);
+                    .setLabel('Join now')
+                    .setURL(commonVariable.supportLink)
+                    .setStyle(ButtonStyle.Link);
+
+                const row = new ActionRowBuilder()
+                    .addComponents(urlButton);
 
                 return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [commonVariable.file], components: [row] });
 
             }
-            else{
+            else {
                 return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [commonVariable.file] });
 
             }

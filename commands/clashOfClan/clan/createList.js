@@ -2,6 +2,7 @@ const commonVariable = require('../../../share/index');
 const cocClient = require('../../../share/coc/cocClientLogin');
 const formatTime = require('../../../share/formatTime');
 const calculateTime = require('../../../share/calculateTime');
+const cocButtonRow = require('../../../share/buttonRow/cocButtonRow');
 
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder,StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require("discord.js");
 
@@ -107,9 +108,7 @@ module.exports = {
 
             try {
 
-                const clan = await cocClient.cocClientLogin.getClan(clanTag);
-
-                console.log(clan.name)
+              //  const clan = await cocClient.cocClientLogin.getClan(clanTag);
 
                 const defaultEmbed = new EmbedBuilder()
                 .setColor(commonVariable.defaultEmbedColorCode)
@@ -120,7 +119,6 @@ module.exports = {
                 const question = interaction.options.getString('question');
                 const directmessage = interaction.options.getBoolean('directmessage');
                 const role = interaction.options.getRole('role');
-                console.log(interaction.options.getRole('role') !== null);
     
                 let list = [];
                 let temList = [];
@@ -157,8 +155,7 @@ module.exports = {
                 defaultEmbed.setFields(
                     { name: 'No one yet', value: "\u200B", inline: true },
                 );
-    
-                const response = await interaction.reply({ embeds: [defaultEmbed], files: [commonVariable.file], components: [row] });
+                const response = await interaction.reply({ embeds: [defaultEmbed], files: [commonVariable.file], components: [cocButtonRow(clanTag),row] });
     
                 let countdown = timeInMilliseconds;
     
@@ -202,7 +199,7 @@ module.exports = {
                         );
                     }
     
-                    interaction.editReply({ embeds: [defaultEmbed], components: [row] });
+                    interaction.editReply({ embeds: [defaultEmbed], components: [cocButtonRow(clanTag),row] });
     
                     if (directmessage === true) {
                         client.users.fetch(interaction.user.id, false).then((user) => {
@@ -259,7 +256,7 @@ module.exports = {
     
                     }
     
-                    await confirmation.update({ embeds: [defaultEmbed], files: [commonVariable.file], components: [row] });
+                    await confirmation.update({ embeds: [defaultEmbed], files: [commonVariable.file], components: [cocButtonRow(clanTag),row] });
     
                 }
 

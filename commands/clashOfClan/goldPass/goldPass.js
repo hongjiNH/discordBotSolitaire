@@ -1,6 +1,7 @@
 const commonVariable = require('../../../share/index');
 const cocClient = require('../../../share/coc/cocClientLogin');
-const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle  } = require("discord.js");
+const cocButtonRow =require('../../../share/buttonRow/cocButtonRow');
+const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -8,8 +9,6 @@ module.exports = {
         .setDescription('Get information about the current gold pass season'),
 
     async execute(interaction) {
-
-
 
         try {
             const clan = await cocClient.cocClientLogin.getGoldPassSeason();
@@ -19,13 +18,13 @@ module.exports = {
                 .setColor(commonVariable.defaultEmbedColorCode)
                 .setTimestamp()
                 .setFooter(commonVariable.embedFooter)
-                .setTitle("Clash Of Clan Gold Pass")
+                .setTitle("Gold Pass")
                 .setDescription(`It will end in ${clan.endTime}`)
                 .setFields(
                     { name: 'Start time', value: `${clan.startTime}` },
                     { name: 'End time', value: `${clan.endTime}` });
 
-            return interaction.reply({ embeds: [defaultEmbed], files: [commonVariable.file] });
+            return interaction.reply({ embeds: [defaultEmbed], files: [commonVariable.file], components: [cocButtonRow(null)]});
         }
         catch (error) {
 

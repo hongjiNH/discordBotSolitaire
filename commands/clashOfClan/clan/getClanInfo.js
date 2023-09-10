@@ -1,6 +1,8 @@
 
 const commonVariable = require('../../../share/index');
 const cocClient = require('../../../share/coc/cocClientLogin');
+const cocButtonRow = require('../../../share/buttonRow/cocButtonRow');
+
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle  } = require("discord.js");
 module.exports = {
     data: new SlashCommandBuilder()
@@ -14,7 +16,7 @@ module.exports = {
 
         const clanTag = interaction.options.getString('clantag');
 
-        try {
+       // try {
 
             const clan = await cocClient.cocClientLogin.getClan(clanTag);
 
@@ -43,35 +45,35 @@ module.exports = {
                 );
 
             for (let i = 0; i < clan.clanCapital.districts.length; i++) {
-                defaultEmbed.data.addFields(
+                defaultEmbed.addFields(
                     { name: `${clan.clanCapital.districts[i].name}`, value: `${clan.clanCapital.districts[i].districtHallLevel}`, inline: true },
                 );
             };
 
-            return interaction.reply({ embeds: [defaultEmbed], files: [commonVariable.file] });
+            return interaction.reply({ embeds: [defaultEmbed], files: [commonVariable.file] , components: [cocButtonRow(clanTag)] });
 
-        }
-        catch (error) {
+      //  }
+        // catch (error) {
 
-            if (error.status == 500 || error.status === 403) {
+        //     if (error.status == 500 || error.status === 403) {
 
-                const urlButton = new ButtonBuilder()
-                    .setLabel('Join now')
-                    .setURL(commonVariable.supportLink)
-                    .setStyle(ButtonStyle.Link);
+        //         const urlButton = new ButtonBuilder()
+        //             .setLabel('Join now')
+        //             .setURL(commonVariable.supportLink)
+        //             .setStyle(ButtonStyle.Link);
 
-                const row = new ActionRowBuilder()
-                    .addComponents(urlButton);
+        //         const row = new ActionRowBuilder()
+        //             .addComponents(urlButton);
 
-                return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [commonVariable.file], components: [row] });
+        //         return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [commonVariable.file], components: [row] });
 
-            }
-            else {
-                return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [commonVariable.file] });
+        //     }
+        //     else {
+        //         return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [commonVariable.file] });
 
-            }
+        //     }
 
-        }
+        // }
 
     },
 };
