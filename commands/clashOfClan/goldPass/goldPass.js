@@ -15,7 +15,7 @@ module.exports = {
 
 
             const defaultEmbed = new EmbedBuilder()
-                .setColor(commonVariable.defaultEmbedColorCode)
+                .setColor(commonVariable.cocEmbedColorCode)
                 .setTimestamp()
                 .setFooter(commonVariable.embedFooter)
                 .setTitle("Gold Pass")

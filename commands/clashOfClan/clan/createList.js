@@ -111,7 +111,7 @@ module.exports = {
               //  const clan = await cocClient.cocClientLogin.getClan(clanTag);
 
                 const defaultEmbed = new EmbedBuilder()
-                .setColor(commonVariable.defaultEmbedColorCode)
+                .setColor(commonVariable.cocEmbedColorCode)
                 .setTimestamp()
                 .setFooter(commonVariable.embedFooter)
 

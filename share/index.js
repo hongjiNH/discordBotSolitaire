@@ -37,6 +37,7 @@ module.exports.cocCreateList="coccl";
 
 //embed
 module.exports.defaultEmbedColorCode=0x0099FF;
+module.exports.cocEmbedColorCode=0xffed00;
 module.exports.errorEmbedColorCode=0xED4245;
 module.exports.embedFooter={ text: `By @nothealthy - youtube channel`, iconURL: 'attachment://'+this.logo}
 

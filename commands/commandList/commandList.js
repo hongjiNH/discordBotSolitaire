@@ -28,7 +28,7 @@ module.exports = {
 
         //COC
         const defaultEmbed1 = new EmbedBuilder()
-        .setColor(commonVariable.defaultEmbedColorCode)
+        .setColor(commonVariable.cocEmbedColorCode)
         .setTimestamp()
         .setFooter(commonVariable.embedFooter)
 
