@@ -21,6 +21,10 @@ const commandFolders = fs.readdirSync(foldersPath);
 const clashOfClanPath = path.join(__dirname, 'commands/clashOfClan');
 const clashOfClanCommandFolders = fs.readdirSync(clashOfClanPath);
 
+// // Grab all the command/valorent folders from the commands directory you created earlier
+// const valorentPath = path.join(__dirname, 'commands/valorent');
+// const valorentCommandFolders = fs.readdirSync(valorentPath);
+
 for (const folder of commandFolders) {
 	const commandsPath = path.join(foldersPath, folder);
 
@@ -56,7 +60,25 @@ for (const folder of clashOfClanCommandFolders) {
 
 }
 
+// // for valorent command
+// for (const folder of valorentCommandFolders) {
 
+// 	const commandsPath = path.join(valorentPath, folder);
+	
+// 	const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+
+// 	for (const file of commandFiles) {
+// 		const filePath = path.join(commandsPath, file);
+// 		const command = require(filePath);
+// 		if ('data' in command && 'execute' in command) {
+// 			client.commands.set(command.data.name, command);
+
+// 		} else {
+// 			console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+// 		}
+// 	}
+
+// }
 
 client.once(Events.ClientReady, c => {
 

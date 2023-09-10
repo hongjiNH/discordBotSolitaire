@@ -16,6 +16,10 @@ const commandFolders = fs.readdirSync(foldersPath);
 const clashOfClanPath = path.join(__dirname, 'commands/clashOfClan');
 const clashOfClanCommandFolders = fs.readdirSync(clashOfClanPath);
 
+// // Grab all the command/valorent folders from the commands directory you created earlier
+// const valorentPath = path.join(__dirname, 'commands/valorent');
+// const valorentCommandFolders = fs.readdirSync(valorentPath);
+
 module.exports = (guildId,client) => {
 	for (const folder of commandFolders) {
 		// Grab all the command files from the commands directory you created earlier
@@ -48,6 +52,25 @@ module.exports = (guildId,client) => {
 			}
 		}
 	}
+
+	// for (const folder of valorentCommandFolders) {
+	// 	// Grab all the command/valorent files from the commands directory you created earlier
+	// 	const commandsPath = path.join(valorentPath, folder);
+	// 	const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+	// 	// Grab the SlashCommandBuilder#toJSON() output of each command's data for deployment
+	// 	for (const file of commandFiles) {
+	// 		const filePath = path.join(commandsPath, file);
+	// 		const command = require(filePath);
+	// 		if ('data' in command && 'execute' in command) {
+	// 			commands.push(command.data.toJSON());
+	// 		} else {
+	// 			console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+	// 		}
+	// 	}
+	// }
+
+
+	
 
 	// Construct and prepare an instance of the REST module
 	const rest = new REST().setToken(token);

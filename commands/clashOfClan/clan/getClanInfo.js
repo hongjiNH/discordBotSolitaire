@@ -63,7 +63,7 @@ module.exports = {
                 const row = new ActionRowBuilder()
                     .addComponents(urlButton);
 
-                return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [commonVariablefile], components: [row] });
+                return interaction.reply({ embeds: [cocClient.cocClientError(error.status)], files: [commonVariable.file], components: [row] });
 
             }
             else {

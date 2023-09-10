@@ -43,3 +43,7 @@ module.exports.embedFooter={ text: `By @nothealthy - youtube channel`, iconURL: 
 
 //file
 module.exports.file = new AttachmentBuilder('../'+this.botName+'/assets/'+this.logo);
+
+//valorent
+// module.exports.valorentVersion ="vversion";
+// module.exports.valorentPlatformData ="vpd";
