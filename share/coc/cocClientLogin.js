@@ -51,11 +51,11 @@ module.exports.cocClientError = (errorStatus) => {
                 .setTitle('Clash of clan maintenance  ')
                 .setDescription(`Service is temprorarily unavailable because of maintenance  `)
             break;
-        // default:
-        //     errorEmbed
-        //         .setTitle('Unknown error happened when handling the Clash of clan request code: '+errorStatus)
-        //         .setDescription(`Kindly join the support server to inform the support about this thank you  `)
-        //     break;
+        default:
+            errorEmbed
+                .setTitle('Unknown error happened when handling the Clash of clan request code: '+errorStatus)
+                .setDescription(`Kindly join the support server to inform the support about this thank you  `)
+            break;
     }
 
     return errorEmbed;

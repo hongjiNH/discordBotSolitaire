@@ -2,6 +2,10 @@ const commonVariable = require('../../../share/index');
 const cocClient = require('../../../share/coc/cocClientLogin');
 const cocClanWarStatus = require('../../../share/coc/cocClanWarStatus');
 const cocButtonRow = require('../../../share/buttonRow/cocButtonRow');
+const ExcelJS = require('exceljs');
+const currentDate = require('../../../share/currentDate');
+
+const fs = require('fs');
 
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 
@@ -19,6 +23,45 @@ module.exports = {
 
         try {
             const clan = await cocClient.cocClientLogin.getCurrentWar(clanTag);
+
+            function getMemberButton(clan) {
+                if (clan.state !== "notInWar") {
+
+                    const bothClanMember = new ButtonBuilder()
+                        .setCustomId('bothClanMember_' + commonVariable.cocCurrentWar)
+                        .setLabel('both clan member info')
+                        .setStyle(ButtonStyle.Primary);
+
+                    return row = new ActionRowBuilder()
+                        .addComponents(bothClanMember);
+                }
+            }
+
+            async function getClanMembers() {
+
+                const workbook = new ExcelJS.Workbook();
+                const clanMemberSheet = workbook.addWorksheet(clan.clan.name);
+                const oppMemberSheet = workbook.addWorksheet(clan.opponent.name);
+
+                // Add data to the worksheet
+                clanMemberSheet.addRow(['Name', 'Tag', 'Map Position', 'Town Hall Level']);
+                oppMemberSheet.addRow(['Name', 'Tag', 'Map Position', 'Town Hall Level']);
+                const memberList = clan.clan.members.map(members => [members.name, members.tag, members.mapPosition, members.townHallLevel]);
+                const oppMemberList = clan.opponent.members.map(members => [members.name, members.tag, members.mapPosition, members.townHallLevel]);
+
+                for (let i = 0; i < clan.clan.members.length; i++) {
+                    clanMemberSheet.addRow([memberList[i][0], memberList[i][1], memberList[i][2], memberList[i][3]]);
+                }
+
+                for (let i = 0; i < clan.clan.members.length; i++) {
+                    oppMemberSheet.addRow([oppMemberList[i][0], oppMemberList[i][1], oppMemberList[i][2], oppMemberList[i][3]]);
+                }
+
+                // Save the workbook to a file
+                await workbook.xlsx.writeFile(`bothClanMemberInfo.xlsx`);
+                return (`bothClanMemberInfo.xlsx`);
+
+            }
 
             let clanwarStauts = "";
 
@@ -46,7 +89,6 @@ module.exports = {
                             { name: 'End at', value: `**${clan.endTime}**` },);
 
                     clanwarStauts = cocClanWarStatus(clan);
-
                     defaultEmbed.addFields(
                         clanwarStauts,
                         { name: "Your team total stars", value: `**${clan.clan.stars}**` },
@@ -69,7 +111,25 @@ module.exports = {
                     break;
             }
 
-            return interaction.reply({ embeds: [defaultEmbed], files: [commonVariable.file], components: [cocButtonRow(clanTag)] });
+            const response = await interaction.reply({ embeds: [defaultEmbed], files: [commonVariable.file], components: [getMemberButton(clan), cocButtonRow(clanTag)] });
+
+            const confirmation = await response.awaitMessageComponent();
+
+            if (confirmation.customId === 'bothClanMember_' + commonVariable.cocCurrentWar) {
+
+                await confirmation.update({ embeds: [defaultEmbed], files: [commonVariable.file, { attachment: (await getClanMembers()).toString(), name: (await getClanMembers()).toString() }], components: [getMemberButton(clan), cocButtonRow(clanTag)] });
+                const fileNameToDelete = (await getClanMembers()).toString();
+
+                // Check if the file exists
+                if (fs.existsSync(fileNameToDelete)) {
+                  // Delete the file
+                  fs.unlinkSync(fileNameToDelete);
+                  console.log(`File '${fileNameToDelete}' has been deleted.`);
+                } else {
+                  console.log(`File '${fileNameToDelete}' does not exist.`);
+                }
+            }
+
         }
         catch (error) {
             if (error.status == 500 || error.status === 403) {
@@ -94,6 +154,7 @@ module.exports = {
 
     },
 };
+
 
 
 
