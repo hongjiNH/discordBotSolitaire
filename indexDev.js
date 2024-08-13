@@ -2,6 +2,7 @@ require('dotenv').config({ path: ".env.dev" });
 const fs = require('node:fs');
 const path = require('node:path');
 const changeStatus = require('./botActivity/botActivity')
+const keepAlive= require('./botActivity/keepBotAlive')
 const commonVariable = require('./share/index');
 const autoUpdate = require('./deploy-commands')
 
